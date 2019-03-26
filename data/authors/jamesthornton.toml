@@ -1,0 +1,11 @@
+id = "jamesthornton"
+
+[email]
+username = "jamesthornton"
+host = "gmail.com"
+
+[name]
+display = "James Thornton"
+
+[social]
+github = "https://github.com/demogorgonzola"
