@@ -9,9 +9,36 @@ title: "Resume"
     display: table;
   }
 
+  .entry-content ul {
+    list-style-type: circle;
+  }
+
   .entry-content p {
-    /* display: inline; */
     margin: 0px;
+  }
+
+  .entry-content h1, .entry-content h2,
+  .entry-content h3, .entry-content h4,
+  .entry-content h5, .entry-content h6 ::after {
+    margin-top: 0px;
+    font-size: 1em;
+  }
+
+  h3, h4, h5, h6 {
+    display: inline;
+  }
+
+  .important {
+    font-weight: bold;
+  }
+
+  .subtext {
+    font-style: italic;
+  }
+
+  .right {
+    display: inline;
+    float: right;
   }
 
   .resume-header {
@@ -19,92 +46,94 @@ title: "Resume"
     margin-bottom: 1.5em;
   }
 
-  [class*="resume-body-"] {
-    width: 100%;
+  .resume-subject {
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-bottom: 1.5em;
   }
 
-  .dated-text-subject {
-    display: inline;
-  }
-
-  .dated-text-date {
-    display: inline;
-    float: right;
+  .resume-object {
+    padding-bottom: 0.5em;
+    margin-bottom: 1.0em;
+    border-bottom: 1px black solid;
   }
 
   @media only screen and (min-width: 731px) {
-    .entry-content {
-      /* box-sizing: border-box; */
-    }
-
-    /* .resume-body-title {
-      box-sizing: border-box;
-      float: left;
-      clear: right;
-      width: 25%;
-      padding-left: 1%;
-      padding-right: 1%;
-    }
-
-    .resume-body-content {
-      box-sizing: border-box;
-      float: left;
-      clear: left;
-      width: 75%;
-    } */
-
-    .resume-body-title {
+    .resume-subject {
       float: left;
       width: 25%;
-      padding-left: 10px;
-      padding-right: 10px;
-      margin-bottom: 1.5em;
+      padding: 0px 10px 0px 10px;
     }
 
-    .resume-body-content {
+    .resume-object {
       float: left;
-      display: inline;
       width: 75%;
-      padding-bottom: 0.5em;
-      margin-bottom: 1.0em;
-      border-bottom: 1px black solid;
     }
   }
-
 </style>
 
 <div class="resume-header">
-  <h2>Full Stack Developer</h2>
+  <h1>Full Stack Developer</h1>
   <p>James M. Thornton</p>
   <p>+1 (281) 705-3226</p>
   <p>solverjt+jobs@gmail.com</p>
 </div>
 
-<!-- <br> -->
+<p class="resume-subject">Objective</p>
+<p class="resume-object">Rapidly produce iterative solutions for any kind of software through meticulous research and decisive strategy.</p>
 
-<div class="resume-body-title">
-  <p>OBJECTIVE</p>
-</div>
-<div class="resume-body-content">
-  <p>
-    Rapidly produce iterative solutions for any kind of software through meticulous research and decisive strategy.
-  </p>
-</div>
+<h2 class="resume-subject">Experience</h2>
+<span class="resume-object">
+  <h3>Conscious Cleanse/Helping Hands Websites</h3> <p class="right">June - November 2018</p>
+  <p >RaddCreative, Fort Collins, Colorado</> <p class="right">Javascript, PHP, Wordpress, Ember</p>
+  <dl>
+    <dd>
+      Constructed fleshed out network API’s as a mixture of general case and useful case endpoints.
+    </dd>
+    <dd>
+      Performed consistent full stack feature development and bug-fixes on an iterative, weekly cycle.
+    </dd>
+  </dl>
 
-<div class="resume-body-title">
-  <p>EDUCATION</p>
-</div>
-<div class="resume-body-content">
+
+  <dl>
+    <dt>
+      <h3>Spotify </h3> <p class="right">June - August 2015</p>
+      <p>AlleyCat Cafe, Fort Collins, Colorado</p> <p class="right">Python, Javascript, HTML, CSS</p>
+    </dt>
+    <dd>
+      Worked closely with client developing iterative requirement documents to effectively design and construct a product.
+    </dd>
+    <dd>
+      Composed many libraries and network APIs to work in unison between multiple languages under RPC and REST principle network calls.
+    </dd>
+  </dl>
+
+  <h3>Image Identification and Classification of Plankton Species</h3> <p class="right">January - March 2015</p>
+  <p class="subtext">National Data Science Bowl (2015)</p> <p class="right">Python, SciKit Learn, Numpy, Pandas</p>
+  <dl>
+    <dd><p>
+      Analyzed efficiency of a myriad of clustering algorithms to more accurately include, and identify systematic error in, lower quality photos.
+    </p></dd>
+    <dd><p>
+      Developed a method of classification based on the relative distance between distinct “corners” of the organism and its predicted “center”.
+    </p></dd>
+  </dl>
+</span>
+
+<p class="resume-subject">Education</p>
+<span class="resume-object">
   <p class="dated-text-subject">Colorado State University</p><p class="dated-text-date">December 2014</p>
   <p>
     Bachelors of Science in Computer Science(3.0), minor in Mathematics (Major: 3.0, Minor: 3.4)
   </p>
-</div>
+</span>
 
-<div class="resume-body-title">
-  <p>SKILLS</p>
-</div>
-<div class="resume-body-content">
+
+<!--  -->
+
+<p class="resume-subject">Skills</p>
+<span class="resume-object">
   <ul>
     <li>
        Languages: HTML, CSS, Javascript, PHP, SQL, Python, C, C++, R, Java
@@ -119,55 +148,7 @@ title: "Resume"
       Operated in test-driven and behavior-driven development cycles
     </li>
     <li>
-      Worked with teams in an agile development environment
-    </li>
-    <li>
       Handled remote communication and development of projects
     </li>
   </ul>
-</div>
-
-<div class="resume-body-title">
-  <p>EXPERIENCE</p>
-</div>
-<div class="resume-body-content">
-  <p class="dated-text-subject">Conscious Cleanse/Helping Hands Websites</p>
-  <p class="dated-text-date">June - November 2018</p>
-  <p class="dated-text-subject">RaddCreative, Fort Collins, Colorado</p>
-  <p class="dated-text-date">Javascript, PHP, Wordpress, Ember</p>
-  <ul>
-    <li>
-      Constructed fleshed out network API’s as a mixture of general case and useful case endpoints.
-    </li>
-    <li>
-      Performed consistent full stack feature development and bug-fixes on an iterative, weekly cycle.
-    </li>
-  </ul>
-
-  <p class="dated-text-subject">Spotify Powered Local Area Network Website</p>
-  <p class="dated-text-date">June - August 2015</p>
-  <p class="dated-text-subject">AlleyCat Cafe, Fort Collins, Colorado</p>
-  <p class="dated-text-date">Python, Javascript, HTML, CSS</p>
-  <ul>
-    <li>
-      Worked closely with client developing iterative requirement documents to effectively design and construct a product.
-    </li>
-    <li>
-      Composed many libraries and network APIs to work in unison between multiple languages under RPC and REST principle network calls.
-    </li>
-  </ul>
-
-  <p class="dated-text-subject">Image Identification and Classification of Plankton Species</p>
-  <p class="dated-text-date">January - March 2015</p>
-  <p class="dated-text-subject">National Data Science Bowl (2015)</p>
-  <p class="dated-text-date">Python, SciKit Learn, Numpy, Pandas</p>
-  <ul>
-    <li>
-      Analyzed efficiency of a myriad of clustering algorithms to more accurately include, and identify systematic error in, lower quality photos.
-    </li>
-    <li>
-      Developed a method of classification based on the relative distance between distinct “corners” of the organism and its predicted “center”.
-    </li>
-  </ul>
-
-</div>
+</span>
