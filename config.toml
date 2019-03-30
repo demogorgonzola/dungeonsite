@@ -131,8 +131,14 @@ identifier = "dnd"
 url = "/dnds"
 
 [[menu.main]]
+name = "Demos"
+weight = 3
+identifier = "demos"
+url = "/demos"
+
+[[menu.main]]
 name = "Resume"
-weight = 2
+weight = 3
 identifier = "resume"
 url = "/resume"
 
