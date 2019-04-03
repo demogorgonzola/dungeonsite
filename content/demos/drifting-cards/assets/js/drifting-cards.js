@@ -1,12 +1,15 @@
 var width = 300;
 var height = 300;
 
-var pointGridDimensions = [4,4];
+var pointGridDimensions = [5,4];
 var spacing = 25;
 
+var cardSize = 30;
+var pointSize = 4;
 
-var elem = document.currentScript.parentElement;
-var two = new Two({ width: width, height: height }).appendTo(elem);
+var travelRate = 0.05;
+var returnRate = 0.07;
+
 
 function genPointGrid(dimensions, spacing) {
   let grid = [];
@@ -36,29 +39,86 @@ function translate(points, dx, dy) {
   return points;
 }
 
-
-//random point generator placeholder
-function genRandomPointPairs(num, padding=0) {
-  let pairs = [];
-  for(let i=0 ; i < num ; i++) {
-    let pair = [[],[]];
-    pair[0][0] = padding+Math.floor(Math.random()*(two.width-(padding*2)));
-    pair[0][1] = padding+Math.floor(Math.random()*(two.height-(padding*2)));
-    pair[1][0] = padding+Math.floor(Math.random()*(two.width-(padding*2)));
-    pair[1][1] = padding+Math.floor(Math.random()*(two.height-(padding*2)));
-    pairs.push(pair);
-  }
-  return pairs;
+function dist(p1, p2) {
+  let dx = p1[0]-p2[0];
+  let dy = p1[1]-p2[1];
+  return Math.sqrt((dx*dx) + (dy*dy));
 }
 
-//card.length <= points.length
-function driftingCards(cards, points) {
-  //placeholder - randompairing
+//drift algorithms
+
+//O(n^2),
+function shortestPath(cards, points) {
+  points = points.slice(); //shallow copy
+  return cards.map(function(card) {
+    let fd = this.dist(card,points[0]);
+    let {point, index, dist} = points.reduce(function(shortest, point, index) {
+      let dist = this.dist(card,point);
+      if(dist < shortest.dist) {
+        shortest.point = point;
+        shortest.index = index;
+        shortest.dist = dist;
+      }
+      return shortest;
+    }, { point: points[0], index: 0, dist: fd});
+    points.splice(index,1);
+    return [card, point];
+  });
+}
+
+//O(nlogn)
+function gridSort(points, dimensions) {
+  let xsort = points.slice().sort(function(a,b) { return a[0] - b[0]; });
+  // let ysort = points.slice().sort(function(a,b) { return a[1] - b[1]; });
+
+  let grid = [];
+  while(xsort.length > 0) {
+    let ysort = xsort.splice(0,dimensions[1]).sort(function(a,b) { return a[1] - b[1]; });
+    ysort.forEach(function(point) { grid.push(point); });
+  }
+  return grid;
+}
+
+// function hashSort(points, dimensions) {
+//   let hashdiv = Math.ceil(Math.log10(dimensions[1]));
+//   let xsort = points.map(function(point) {
+//     return { xhash: (point[0]*Math.pow(10, hashdiv))+point[1] , point: point }
+//   })
+//   .sort(function(a,b) { return a.xhash - b.xhash; });
+//   while(xsort.length > 0) {
+//     let row = xsort.splice(0,dimensions[1]);
+//
+//   }
+//
+//   .map(function(hashpoint) {
+//     return hashpoint.point;
+//   });
+// }
+
+function gridMorphMatch(cards, points) {
+  let dim = Math.ceil( Math.sqrt( cards.length ) );
+  let dimensions = [dim,dim];
+  cards = gridSort(cards, dimensions);
+  points = gridSort(points, dimensions);
+  // cards = hashSort(cards, [width,height]);
+  // points = hashSort(points, [width,height]);
   return cards.map(function(card, index) {
     let point = points[index];
     return [card, point];
   });
 }
+
+
+let dx = Math.floor((width-((pointGridDimensions[0]-1)*spacing))/2);
+let dy = Math.floor((height-((pointGridDimensions[1]-1)*spacing))/2);
+let points = translate(genPointGrid(pointGridDimensions,spacing),dx,dy); //center grid
+//start here: start plugging the components above together to make random card to point grid animation
+// let points = translate(genRandomPoints(pointGridDimensions[0]*pointGridDimensions[1], [width-cardSize,height-cardSize]), cardSize/2, cardSize/2);
+let cards = translate(genRandomPoints(pointGridDimensions[0]*pointGridDimensions[1], [width-cardSize,height-cardSize]), cardSize/2, cardSize/2);
+
+let usedAlgo = gridMorphMatch(cards, points, pointGridDimensions);
+// let usedAlgo = shortestPath(cards,points)
+
 
 function toggle(...properties) {
   properties.forEach((property) => {
@@ -70,20 +130,11 @@ function toggle(...properties) {
 }
 
 //graph setup
-let cardSize = 25;
-let pointSize = 4;
+var elem = document.currentScript.parentElement;
+var two = new Two({ width: width, height: height }).appendTo(elem);
 
-let travelRate = 0.05;
-let returnRate = 0.07;
-
-let dx = (width-((pointGridDimensions[0]-1)*spacing))/2;
-let dy = (height-((pointGridDimensions[1]-1)*spacing))/2;
-let pointsK = translate(genPointGrid(pointGridDimensions,spacing),dx,dy); //center grid
-//start here: start plugging the components above together to make random card to point grid animation
-let cardsK = translate(genRandomPoints(pointGridDimensions[0]*pointGridDimensions[1], [width-15,height-15]), 15, 15);
-
-let {cards, points} = driftingCards(cardsK,pointsK).reduce((graph, pointpair) => {
-  let card = two.makeRectangle(pointpair[0][0], pointpair[0][1], cardSize, cardSize+5);
+let graph = usedAlgo.reduce((graph, pointpair) => {
+  let card = two.makeRectangle(pointpair[0][0], pointpair[0][1], cardSize-5, cardSize);
   let point = two.makeCircle(pointpair[1][0], pointpair[1][1], pointSize);
   card._desttoggles = [
     { x: point.translation.x, y: point.translation.y },
@@ -97,42 +148,42 @@ let {cards, points} = driftingCards(cardsK,pointsK).reduce((graph, pointpair) =>
   return graph;
 }, { cards: two.makeGroup(), points: two.makeGroup() });
 
-cards._ratetoggles = [ travelRate, returnRate ];
-cards.opacitytoggles = [ 1.0, 0.5 ];
-cards._rate = cards._ratetoggles[0];
-cards.opacity = cards.opacitytoggles[0];
-cards.toggle = toggle.bind(cards, "_rate", "opacity");
-cards.waiting = 0;
+graph.cards._ratetoggles = [ travelRate, returnRate ];
+graph.cards.opacitytoggles = [ 1.0, 0.5 ];
+graph.cards._rate = graph.cards._ratetoggles[0];
+graph.cards.opacity = graph.cards.opacitytoggles[0];
+graph.cards.toggle = toggle.bind(graph.cards, "_rate", "opacity");
+graph.cards.waiting = 0;
 
-cards.fill = '#1DA1F2';
-cards.stroke = '#1D81F2';
-points.fill = '#FF8000';
-points.stroke = '#FF6000';
+graph.cards.fill = '#1DA1F2';
+graph.cards.stroke = '#1D81F2';
+graph.points.fill = '#FF8000';
+graph.points.stroke = '#FF6000';
 
 //run loop
 two.bind('update', (frameCount) => {
-  if(cards.waiting == cards.children.length) {
-    cards.toggle();
-    for(let i=0; i<cards.children.length; i++) {
-      let card = cards.children[i];
+  if(graph.cards.waiting == graph.cards.children.length) {
+    graph.cards.toggle();
+    for(let i=0; i<graph.cards.children.length; i++) {
+      let card = graph.cards.children[i];
       card.toggle();
       card.waiting = false;
     }
-    cards.waiting = 0;
+    graph.cards.waiting = 0;
   }
-  for(let i=0; i<cards.children.length; i++) {
-    let card = cards.children[i];
+  for(let i=0; i<graph.cards.children.length; i++) {
+    let card = graph.cards.children[i];
     if(!card.waiting) {
       let dx = card._dest.x-card.translation.x;
       let dy = card._dest.y-card.translation.y;
 
       if (Math.abs(dx) < 0.1 && Math.abs(dy) < 0.1) {
         card.waiting = true;
-        cards.waiting++;
+        graph.cards.waiting++;
       }
 
-      card.translation.x += dx*cards._rate;
-      card.translation.y += dy*cards._rate;
+      card.translation.x += dx*graph.cards._rate;
+      card.translation.y += dy*graph.cards._rate;
     }
   }
 }).play();  // Finally, start the animation loop
