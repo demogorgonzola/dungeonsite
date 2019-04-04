@@ -1,7 +1,7 @@
 var width = 300;
 var height = 300;
 
-var pointGridDimensions = [5,4];
+var pointGridDimensions = [10,10];
 var spacing = 25;
 
 var cardSize = 30;
@@ -11,7 +11,7 @@ var travelRate = 0.05;
 var returnRate = 0.07;
 
 
-function genPointGrid(dimensions, spacing) {
+function genPointGrid(dimensions , spacing) {
   let grid = [];
   for(let xstep=0; xstep<dimensions[0]; xstep++) {
     for(let ystep=0; ystep<dimensions[1]; ystep++) {
@@ -25,8 +25,8 @@ function genRandomPoints(num, bounds) {
   let points = [];
   for(let i=0 ; i < num ; i++) {
     points.push([
-      Math.floor(Math.random()*bounds[0]),
-      Math.floor(Math.random()*bounds[1])
+      Math.random()*bounds[0],
+      Math.random()*bounds[1]
     ]);
   }
   return points;
@@ -69,7 +69,6 @@ function shortestPath(cards, points) {
 //O(nlogn)
 function gridSort(points, dimensions) {
   let xsort = points.slice().sort(function(a,b) { return a[0] - b[0]; });
-  // let ysort = points.slice().sort(function(a,b) { return a[1] - b[1]; });
 
   let grid = [];
   while(xsort.length > 0) {
@@ -79,29 +78,9 @@ function gridSort(points, dimensions) {
   return grid;
 }
 
-// function hashSort(points, dimensions) {
-//   let hashdiv = Math.ceil(Math.log10(dimensions[1]));
-//   let xsort = points.map(function(point) {
-//     return { xhash: (point[0]*Math.pow(10, hashdiv))+point[1] , point: point }
-//   })
-//   .sort(function(a,b) { return a.xhash - b.xhash; });
-//   while(xsort.length > 0) {
-//     let row = xsort.splice(0,dimensions[1]);
-//
-//   }
-//
-//   .map(function(hashpoint) {
-//     return hashpoint.point;
-//   });
-// }
-
-function gridMorphMatch(cards, points) {
-  let dim = Math.ceil( Math.sqrt( cards.length ) );
-  let dimensions = [dim,dim];
+function gridMorphMatch(cards, points, dimensions) {
   cards = gridSort(cards, dimensions);
   points = gridSort(points, dimensions);
-  // cards = hashSort(cards, [width,height]);
-  // points = hashSort(points, [width,height]);
   return cards.map(function(card, index) {
     let point = points[index];
     return [card, point];
@@ -112,12 +91,9 @@ function gridMorphMatch(cards, points) {
 let dx = Math.floor((width-((pointGridDimensions[0]-1)*spacing))/2);
 let dy = Math.floor((height-((pointGridDimensions[1]-1)*spacing))/2);
 let points = translate(genPointGrid(pointGridDimensions,spacing),dx,dy); //center grid
-//start here: start plugging the components above together to make random card to point grid animation
-// let points = translate(genRandomPoints(pointGridDimensions[0]*pointGridDimensions[1], [width-cardSize,height-cardSize]), cardSize/2, cardSize/2);
 let cards = translate(genRandomPoints(pointGridDimensions[0]*pointGridDimensions[1], [width-cardSize,height-cardSize]), cardSize/2, cardSize/2);
 
 let usedAlgo = gridMorphMatch(cards, points, pointGridDimensions);
-// let usedAlgo = shortestPath(cards,points)
 
 
 function toggle(...properties) {
