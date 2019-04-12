@@ -1,0 +1,12 @@
+{{ $inner := trim .Inner " \t\n" }}
+{{ $delimiter := .Get "delimiter" | default "\n" }}
+{{ $class := .Get "class" | default "" }}
+{{ $childClass := .Get "childClass" | default "" }}
+{{ $termClassPrefix := .Get "termClassPrefix" | default ""}}
+<div class="{{ $class }}">
+  {{- range (split $inner $delimiter) -}}
+    <span class="{{ $termClassPrefix }}-{{ urlize . }} {{ $childClass }}" style="display:inline-block;">
+      {{- markdownify . -}}
+    </span>
+  {{- end -}}
+</div>
