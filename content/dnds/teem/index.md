@@ -26,6 +26,9 @@ Persuasion
 Deception
 Investigation
 Survival
+athletics
+acrobatics
+animal handling
 {{% /termbox %}}
 
 Common Draconic Goblin
