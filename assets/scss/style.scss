@@ -24,8 +24,9 @@ li {
   margin: 0px;
 }
 
-.shiftbox {
-  margin: 0 0 1.5em;
+.shiftbox,
+.termbox {
+  margin: 0 0 1.5em 0;
 }
 
 @import 'dnds/dnds';

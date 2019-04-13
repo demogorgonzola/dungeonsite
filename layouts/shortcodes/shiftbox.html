@@ -1,14 +1,11 @@
-{{ $inner := trim .Inner " \t\n" }}
+{{ $inner := trim .Inner " \t\n\r" }}
 {{ $delimiter := .Get "delimiter" | default "\n" }}
 {{ $class := .Get "class" | default "" }}
 {{ $childClass := .Get "childClass" | default "" }}
-<div class="{{ $class }}">
+<div class="shiftbox {{ $class }}">
   {{- range (split $inner $delimiter) -}}
-    <span class="{{ $childClass }}" style="display:inline-block;">
+    <span class="shiftbox-item {{ $childClass }}" style="display:inline-block;">
       {{- markdownify . -}}
     </span>
   {{- end -}}
-  <script type="text/javascript">
-    
-  </script>
 </div>

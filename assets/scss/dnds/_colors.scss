@@ -1,11 +1,13 @@
 .dnd-skill-athletics {
-  background-color: #ff432e;
+  background-color: #FF4DAE;
+  color: #F9F871;
 }
 
 .dnd-skill-acrobatics,
 .dnd-skill-sleight-of-hand,
 .dnd-skill-stealth {
-  background-color: #ff85cb;
+  background-color: #4DB9FF;
+  color: #F9F871;
 }
 
 .dnd-skill-arcana,
@@ -13,7 +15,8 @@
 .dnd-skill-investigation,
 .dnd-skill-nature,
 .dnd-skill-religion {
-  background-color: #53bbf4;
+  background-color: #D84DFF;
+  color: #F9F871;
 }
 
 .dnd-skill-animal-handling,
@@ -21,12 +24,26 @@
 .dnd-skill-medicine,
 .dnd-skill-perception,
 .dnd-skill-survival {
-  background-color: #b1eb00;
+  background-color: #D1FF4D;
+  color: #2F4858;
 }
 
 .dnd-skill-deception,
 .dnd-skill-intimidation,
 .dnd-skill-performance,
 .dnd-skill-persuasion {
-  background-color: #ffac00;
+  background-color: #FFC94D;
+  color: #2F4858;
+}
+
+.dnd-spell-prestidigitation,
+.dnd-spell-frostbite {
+  background-color: #845EC2;
+  color: #F9F871;
+}
+
+.dnd-spell-faerie-fire,
+.dnd-spell-sleep {
+  background-color: #D65DB1;
+  color: #F9F871;
 }

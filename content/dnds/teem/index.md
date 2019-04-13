@@ -13,31 +13,37 @@ draft: false
 >}}
 
 {{% shiftbox class="shiftbox dnd-character-abilityscores" childClass="dnd-character-abilityscore" %}}
-Str: **11**(_13_)
-Dex: **18**(_16_)
-Con: **16**
-Int: **10**
-Wis: **14**
-Cha: **16**
+Str→**11**
+Dex→**18**
+Con→**16**
+Int→**10**
+Wis→**14**
+Cha→**16**
 {{% /shiftbox %}}
 
-{{% termbox class="shiftbox dnd-character-skills" childClass="dnd-character-skill" termClassPrefix="dnd-skill" %}}
+{{% termbox class="termbox dnd-character-skills" childClass="dnd-character-skill" termClassPrefix="dnd-skill" %}}
 Persuasion
 Deception
 Investigation
 Survival
-athletics
-acrobatics
-animal handling
 {{% /termbox %}}
 
-Common Draconic Goblin
+{{% termbox class="termbox dnd-character-languages" childClass="dnd-character-language" termClassPrefix="dnd-language" %}}
+Common
+Draconic
+Goblin
+{{% /termbox %}}
 
+{{% termbox class="termbox dnd-character-tools" childClass="dnd-character-skill" termClassPrefix="dnd-tool" %}}
 Painters Supplies
+{{% /termbox %}}
 
-Prestidigitation ; Frostbite
-
-Faerie Fire ; Sleep
+{{% termbox class="termbox dnd-character-spells" childClass="dnd-character-spell" termClassPrefix="dnd-spell" %}}
+Prestidigitation
+Frostbite
+Faerie Fire
+Sleep
+{{% /termbox %}}
 
 ---
 
@@ -57,3 +63,7 @@ Notes:
 * Archfey is tricking Teem and his tribe with fake Tiamat (Dogmuk)
 * Most odd occurrences with Teem or his tribe can be attributed to fey (gnome)
 * Kurtulmak, Kobold God, hates tricksters (see Garl Glittergold)
+
+---
+
+Original Stats: 13 16 16 10 14 16

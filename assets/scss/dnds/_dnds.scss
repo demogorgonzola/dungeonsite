@@ -1,59 +1,76 @@
+$characterProfileWidth: 200px;
+
+.entry-content p {
+  display: inline-block;
+}
+
 .dnd-character-profile {
   text-align: center;
-  width:200px;
+  width: $characterProfileWidth;
   margin: 0 auto;
 }
 
-.dnd-character-abilityscores {
-  max-width: 270px;
-  display: flex;
-  align-content: space-between;
-  text-align: center;
-  margin: 0 auto 1.5em auto;
-}
-
 .dnd-character-abilityscore {
-  text-align: left;
+  width: 33%;
+  padding: 0 4px;
+  text-align: right;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
 }
 
-.dnd-character-skills {
-  max-width: 270px;
-  text-align: center;
-  margin: 0 auto 1.5em auto;
-}
-
-.dnd-character-skill {
+.dnd-character-skill,
+.dnd-character-language,
+.dnd-character-tool,
+.dnd-character-spell {
   text-align: center;
   margin: 2px 2px;
   padding: 2px 4px;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.dnd-character-abilityscores,
+.dnd-character-skills,
+.dnd-character-languages,
+.dnd-character-tools,
+.dnd-character-spells {
+  max-width: 210px;
+  text-align: center;
+  margin: 0 auto 1.5em auto;
+
+  padding-top: 210px;
+  position: relative;
 }
 
 @media only screen and (min-width: 426px) {
   .dnd-character-profile {
     float: right;
     clear: right;
-    margin: 0px;
+  }
+
+  .dnd-character-abilityscores,
+  .dnd-character-skills,
+  .dnd-character-languages,
+  .dnd-character-tools,
+  .dnd-character-spells {
+    display: inline-block;
+    max-width: 235px;
+    text-align: center;
+    margin: 0 0 1.5em 0;
+
+    padding-top: 235px;
   }
 
   .dnd-character-abilityscores {
-    max-width: 330px;
-    text-align: left;
-    margin: 0 auto 1.5em auto;
-  }
-
-  .dnd-character-abilityscore {
-    width: 100px;
-    text-align:left;
-  }
-
-  .dnd-character-skills {
-    max-width: 220px;
-    text-align: left;
-    margin: 0 auto 1.5em 0;
-  }
-  .dnd-character-skill {
-    // width: 110px;
-    text-align: left;
+    display: block;
   }
 }
 

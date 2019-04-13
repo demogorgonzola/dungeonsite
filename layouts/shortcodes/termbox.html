@@ -1,11 +1,11 @@
-{{ $inner := trim .Inner " \t\n" }}
+{{ $inner := trim .Inner " \t\n\r" }}
 {{ $delimiter := .Get "delimiter" | default "\n" }}
 {{ $class := .Get "class" | default "" }}
 {{ $childClass := .Get "childClass" | default "" }}
 {{ $termClassPrefix := .Get "termClassPrefix" | default ""}}
-<div class="{{ $class }}">
+<div class="termbox {{ $class }}">
   {{- range (split $inner $delimiter) -}}
-    <span class="{{ $termClassPrefix }}-{{ urlize . }} {{ $childClass }}" style="display:inline-block;">
+    <span class="termbox-item {{ $termClassPrefix }}-{{ urlize . }} {{ $childClass }}" style="display:inline-block;">
       {{- markdownify . -}}
     </span>
   {{- end -}}
