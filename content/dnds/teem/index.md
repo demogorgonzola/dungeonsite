@@ -7,7 +7,7 @@ draft: false
 {{< figure
   class="dnd-character-profile"
   src="images/teem1.png"
-  width="700px"
+  width="100%"
   title="Teem"
   caption="2'7\" ; 31lbs ; NG"
 >}}
@@ -21,20 +21,20 @@ Wis→**14**
 Cha→**16**
 {{% /shiftbox %}}
 
-{{% termbox class="termbox dnd-character-skills" childClass="dnd-character-skill" termClassPrefix="dnd-skill" %}}
+{{% termbox class="dnd-character-skills" childClass="dnd-character-skill" termClassPrefix="dnd-skill" %}}
 Persuasion
 Deception
 Investigation
 Survival
 {{% /termbox %}}
 
-{{% termbox class="termbox dnd-character-languages" childClass="dnd-character-language" termClassPrefix="dnd-language" %}}
+{{% termbox class="dnd-character-languages" childClass="dnd-character-language" termClassPrefix="dnd-language" %}}
 Common
 Draconic
 Goblin
 {{% /termbox %}}
 
-{{% termbox class="termbox dnd-character-tools" childClass="dnd-character-skill" termClassPrefix="dnd-tool" %}}
+{{% termbox class="dnd-character-tools" childClass="dnd-character-skill" termClassPrefix="dnd-tool" %}}
 Painters Supplies
 {{% /termbox %}}
 
