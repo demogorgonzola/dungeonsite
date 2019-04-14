@@ -90,7 +90,11 @@ function packContainer() {
   let children = document.currentScript.parentElement.getElementsByTagName("span");
   let childrenWidths = [...children].map(element => element.offsetWidth);
 
-  let rows = 3;
+  let lineHeight = children[children.length-1].offsetHeight;
+
+  let rows = Math.floor(Math.abs((children[0].offsetTop-children[children.length-1].offsetTop))/lineHeight + 1);
+  console.log(rows);
+
   // let packWidth = packingWidth(rows,childrenWidths);
   // let packWidth = componentPacking(rows,childrenWidths);
   let packWidth = evenComponentPacking(rows,childrenWidths);
@@ -99,7 +103,7 @@ function packContainer() {
   console.log(packWidth);
 
   //temp workaround
-  packWidth += 10;
+  packWidth += 20;
 
   return packWidth;
 }
