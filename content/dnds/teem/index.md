@@ -4,6 +4,8 @@ date: 2019-03-25T16:46:11-06:00
 draft: false
 ---
 
+<script type="text/javascript" src="js/packing.js">console.log("hi")</script>
+
 {{< figure
   class="dnd-character-profile"
   src="images/teem1.png"
