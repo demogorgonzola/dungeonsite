@@ -60,40 +60,34 @@ function lesserEnough(a,b,e) {
   return (a-b) < -e;
 }
 
+//O(n^2) with componentPacking
 function evenComponentPacking(rows, widths) {
-  widths = widths.slice();
-
   let epsilon = 0.00001;
-
   let totalWidth = widths.reduce((total,width) => total+width);
 
-  let packWidths = [];
   let rowWidth = 0;
   let currWidth = 0;
-  let cutStep = (totalWidth*(Math.floor((currWidth*rows)/totalWidth)+1))/rows;
-  for(let i=0; i<widths.length; i++) {
-    let width = widths[i];
+  let cutStep = totalWidth/rows;
 
-    currWidth += width;
+  return componentPacking(rows, widths.reduce((packedWidths, width) => {
     rowWidth += width;
+    currWidth += width;
 
-    console.log(cutStep)
     if(equalEnough(currWidth,cutStep,epsilon)) {
-      packWidths.push(rowWidth);
+      packedWidths.push(rowWidth);
       rowWidth = 0;
       cutStep = (totalWidth*(Math.floor((currWidth*rows)/totalWidth)+1))/rows;
     } else if(greaterEnough(currWidth,cutStep,epsilon)) {
       if(rowWidth != 0) {
-        packWidths.push(rowWidth-width);
+        packedWidths.push(rowWidth-width);
       }
-      packWidths.push(width);
+      packedWidths.push(width);
       rowWidth = 0;
       cutStep = (totalWidth*(Math.floor((currWidth*rows)/totalWidth)+1))/rows;
     }
-  }
-  console.log(packWidths);
 
-  return componentPacking(rows, packWidths);
+    return packedWidths;
+  }, []));
 }
 
 function packContainer() {
@@ -103,17 +97,11 @@ function packContainer() {
   let lineHeight = children[children.length-1].offsetHeight;
 
   let rows = Math.floor(Math.abs((children[0].offsetTop-children[children.length-1].offsetTop))/lineHeight + 1);
-  console.log(rows);
 
   // let packWidth = packingWidth(rows,childrenWidths);
   // let packWidth = componentPacking(rows,childrenWidths);
   let packWidth = evenComponentPacking(rows,childrenWidths);
-
-  console.log(childrenWidths);
-  console.log(packWidth);
-
-  //temp workaround
-  packWidth += 20;
+  packWidth += 20; //temp workaround
 
   return packWidth;
 }
