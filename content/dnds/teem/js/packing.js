@@ -43,45 +43,55 @@ function componentPacking(rows, widths) {
         smallestPair.length = length;
       }
     }
-    console.log(widths);
     widths.splice(smallestPair.pair[0], smallestPair.pair.length, smallestPair.length);
   }
-  console.log(widths);
   return widths.reduce((carry, width) => { return (width > carry) ? width : carry; }, 0);
 }
 
-function evenComponentPacking(rows, widths) {
-  let epsilon = 0.0001;
+function equalEnough(a,b,e) {
+  return Math.abs(a-b) < e;
+}
 
+function greaterEnough(a,b,e) {
+  return (a-b) > e;
+}
+
+function lesserEnough(a,b,e) {
+  return (a-b) < -e;
+}
+
+function evenComponentPacking(rows, widths) {
   widths = widths.slice();
 
-  let evenCut = widths.reduce((total,width) => total+width)/rows;
+  let epsilon = 0.00001;
+
+  let totalWidth = widths.reduce((total,width) => total+width);
 
   let packWidths = [];
-  let rowLen = 0;
-  let effLen = 0;
+  let rowWidth = 0;
+  let currWidth = 0;
+  let cutStep = (totalWidth*(Math.floor((currWidth*rows)/totalWidth)+1))/rows;
   for(let i=0; i<widths.length; i++) {
     let width = widths[i];
-    if(effLen+width - evenCut > epsilon) {
-      if(rowLen != 0) {
-        packWidths.push(rowLen);
-      }
-      if(effLen+width - evenCut > epsilon) {
-        packWidths.push(width);
-        rowLen = 0;
-      } else {
-        rowLen = width;
-      }
 
-      effLen = effLen+width-evenCut;
-    } else {
-      rowLen += width;
-      effLen += width;
+    currWidth += width;
+    rowWidth += width;
+
+    console.log(cutStep)
+    if(equalEnough(currWidth,cutStep,epsilon)) {
+      packWidths.push(rowWidth);
+      rowWidth = 0;
+      cutStep = (totalWidth*(Math.floor((currWidth*rows)/totalWidth)+1))/rows;
+    } else if(greaterEnough(currWidth,cutStep,epsilon)) {
+      if(rowWidth != 0) {
+        packWidths.push(rowWidth-width);
+      }
+      packWidths.push(width);
+      rowWidth = 0;
+      cutStep = (totalWidth*(Math.floor((currWidth*rows)/totalWidth)+1))/rows;
     }
   }
-  if(rowLen != 0) {
-    packWidths.push(rowLen);
-  }
+  console.log(packWidths);
 
   return componentPacking(rows, packWidths);
 }
