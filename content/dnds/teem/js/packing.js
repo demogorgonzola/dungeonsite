@@ -1,4 +1,6 @@
-function packingWidth(rows, widths) {
+
+//Pack the given number of rows backwards
+function backwardsPacking(rows, widths) {
   let total = widths.reduce( (carry, width) => carry + width );
   let adjustedWidth = (total%rows == 0) ? total : total+(rows-(total%rows));
 
@@ -9,14 +11,9 @@ function packingWidth(rows, widths) {
       if(before > carry.bestWidth)
         carry.bestWidth = carry.rowLen;
       carry.total -= before;
-      // console.log(carry.bestWidth);
-      // console.log(carry.passWidth)
-      // console.log(carry.rowLen)
-      // console.log(carry.rowLen+width)
       carry.rows--;
       carry.passWidth = ((carry.total%carry.rows == 0) ? carry.total : carry.total+(carry.rows-(carry.total%carry.rows)))/carry.rows;
       carry.rowLen = width;
-      // console.log(carry.bestWidth);
     }
     return carry;
   }, {
