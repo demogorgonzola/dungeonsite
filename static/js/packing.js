@@ -122,40 +122,54 @@ function evenedMinSumWidthPacker(widths, rows) {
 }
 
 
-function packContainer(container, widthPackerMethod) {
-  container = container || this.container;
-  widthPackerMethod = widthPackerMethod || this.widthPackerMethod;
+function extractPropertyValue(element, property) {
+  return parseFloat(window.getComputedStyle(element, null).getPropertyValue(property).match(/\d+/));
+}
+
+function pack(container, widthPackerMethod) {
+  container.style.maxWidth = "";
 
   let children = container.getElementsByTagName("span");
 
   let childrenWidths = [...children].map(element => {
-    let childMargin = parseInt(window.getComputedStyle(element, null).getPropertyValue('margin-left').match(/\d+/)) +
-                      parseInt(window.getComputedStyle(element, null).getPropertyValue('margin-right').match(/\d+/)) ;
-    return element.getBoundingClientRect().width+childMargin;
+    let childWidth = element.getBoundingClientRect().width;
+    let childMargin = extractPropertyValue(element, 'margin-left') +
+                      extractPropertyValue(element, 'margin-right');
+    return childWidth+childMargin;
   });
-  let rows = Math.floor(Math.abs((children[0].getBoundingClientRect().top-children[children.length-1].getBoundingClientRect().top))/children[children.length-1].getBoundingClientRect().height + 1);
 
-  let packWidth = widthPackerMethod(childrenWidths,rows);
+  let containerPadding =  extractPropertyValue(container, 'padding-left') +
+                          extractPropertyValue(container, 'padding-right');
 
-  let containerPadding = parseInt(window.getComputedStyle(container, null).getPropertyValue('padding-left').match(/\d+/)) +
-                          parseInt(window.getComputedStyle(container, null).getPropertyValue('padding-right').match(/\d+/)) ;
 
-  // packWidth += containerPadding;
+  let rows = childrenWidths.reduce((carry,width) => {
+    carry.rowWidth += width;
+    if(carry.rowWidth > carry.containerWidth) {
+      carry.rows++;
+      carry.rowWidth = width;
+    }
+    return carry;
+  }, {
+    rows: 1,
+    rowWidth: 0,
+    containerWidth: container.getBoundingClientRect().width-containerPadding,
+  }).rows;
 
-  return packWidth + containerPadding;
+  let packWidth = widthPackerMethod(childrenWidths, rows);
+
+  container.style.maxWidth = (packWidth + containerPadding)+"px";
 }
 
-function beforeLoad(event) {
+function repackAll(event) {
   let containers = document.getElementsByClassName("packing");
 
   [...containers].forEach((container) => {
-    container.style.width = "";
-    container.style.width = packContainer(container, evenedMinSumWidthPacker)+"px";
+    pack(container, evenedMinSumWidthPacker);
   });
 }
 
 //this only works when the script is at the bottom of the file
 //valid hack, use it if you dont want jumpy layout on load
-beforeLoad();
+repackAll();
 
-window.addEventListener("resize", beforeLoad);
+window.addEventListener("resize", repackAll);
