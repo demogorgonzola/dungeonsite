@@ -46,13 +46,11 @@ $characterProfileWidth: 200px;
   .dnd-character-tools,
   .dnd-character-spells {
     display: inline-block;
-    max-width: 240px;
-    // margin: 0 0 1.5em 0;
   }
 
   .dnd-character-abilityscores {
     display: block;
-    // margin-left: ((700px-440px)/2); //temp
+    margin-left: ((700px-440px)/2); //temp
   }
 }
 

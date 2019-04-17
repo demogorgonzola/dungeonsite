@@ -123,23 +123,45 @@ function evenedMinSumWidthPacker(widths, rows) {
 
 
 function packContainer(container, widthPackerMethod) {
+  container = container || this.container;
+  widthPackerMethod = widthPackerMethod || this.widthPackerMethod;
+
   let children = container.getElementsByTagName("span");
   let lineHeight = children[children.length-1].offsetHeight;
 
   let childrenWidths = [...children].map(element => {
     let childMargin = parseInt(window.getComputedStyle(element, null).getPropertyValue('margin-left').match(/\d+/)) +
                       parseInt(window.getComputedStyle(element, null).getPropertyValue('margin-right').match(/\d+/)) ;
-    return element.offsetWidth+childMargin;
+    return element.getBoundingClientRect().width+childMargin;
   });
   let rows = Math.floor(Math.abs((children[0].offsetTop-children[children.length-1].offsetTop))/lineHeight + 1);
 
   let packWidth = widthPackerMethod(childrenWidths,rows);
-  // packWidth += 20; //temp workaround
 
   let containerPadding = parseInt(window.getComputedStyle(container, null).getPropertyValue('padding-left').match(/\d+/)) +
                           parseInt(window.getComputedStyle(container, null).getPropertyValue('padding-right').match(/\d+/)) ;
 
   packWidth += containerPadding;
+  console.log(children[0].offsetTop);
+  console.log(children[children.length-1].offsetTop)
 
-  container.setAttribute("style","width:"+packWidth+"px;");
+  return packWidth;
 }
+
+window.addEventListener("load", function(event) {
+  let containers = document.getElementsByClassName("packing");
+
+  [...containers].forEach((container) => {
+    container.style.width = "";
+    container.style.width = packContainer(container, evenedMinSumWidthPacker)+"px";
+  });
+});
+
+window.addEventListener("resize", function(event) {
+  let containers = document.getElementsByClassName("packing");
+
+  [...containers].forEach((container) => {
+    container.style.width = "";
+    container.style.width = packContainer(container, evenedMinSumWidthPacker)+"px";
+  });
+});

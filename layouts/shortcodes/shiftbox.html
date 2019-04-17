@@ -2,13 +2,10 @@
 {{ $delimiter := .Get "delimiter" | default "\n" }}
 {{ $class := .Get "class" | default "" }}
 {{ $childClass := .Get "childClass" | default "" }}
-<div class="shiftbox {{ $class }}">
+<div class="shiftbox packing {{ $class }}">
   {{- range (split $inner $delimiter) -}}
     <span class="shiftbox-item {{ $childClass }}" style="display:inline-block;">
       {{- markdownify . -}}
     </span>
   {{- end -}}
-  <script type="text/javascript">
-    packContainer(document.currentScript.parentElement, evenedMinSumWidthPacker);
-  </script>
 </div>

@@ -3,13 +3,10 @@
 {{ $class := .Get "class" | default "" }}
 {{ $childClass := .Get "childClass" | default "" }}
 {{ $termClassPrefix := .Get "termClassPrefix" | default ""}}
-<div class="termbox {{ $class }}">
+<div class="termbox packing {{ $class }}">
   {{- range (split $inner $delimiter) -}}
     <span class="termbox-item {{ $termClassPrefix }}-{{ urlize . }} {{ $childClass }}" style="display:inline-block;">
       {{- markdownify . -}}
     </span>
   {{- end -}}
-  <script type="text/javascript">
-    packContainer(document.currentScript.parentElement, evenedMinSumWidthPacker);
-  </script>
 </div>
