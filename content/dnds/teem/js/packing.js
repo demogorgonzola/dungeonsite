@@ -1,80 +1,112 @@
-
-//Pack the given number of rows backwards
-function backwardsPacking(rows, widths) {
-  let total = widths.reduce( (carry, width) => carry + width );
-  let adjustedWidth = (total%rows == 0) ? total : total+(rows-(total%rows));
-
-  return widths.reverse().reduce((carry, width) => {
-    carry.rowLen += width;
-    if(carry.rowLen > carry.passWidth) {
-      let before = carry.rowLen-width;
-      if(before > carry.bestWidth)
-        carry.bestWidth = carry.rowLen;
-      carry.total -= before;
-      carry.rows--;
-      carry.passWidth = ((carry.total%carry.rows == 0) ? carry.total : carry.total+(carry.rows-(carry.total%carry.rows)))/carry.rows;
-      carry.rowLen = width;
-    }
-    return carry;
-  }, {
-    bestWidth: adjustedWidth/rows,
-    total: widths.reduce( (carry, width) => carry + width ),
-    rows: rows,
-    passWidth: adjustedWidth/rows,
-    rowLen: 0
-  }).bestWidth;
+//epsilon equality funcs
+function equalEnough(a,b) {
+  return Math.abs(a-b) < Number.EPSILON;
 }
 
-//O(n^2)
-function componentPacking(rows, widths) {
-  widths = widths.slice();
-  while(widths.length > rows) {
+function greaterEnough(a,b) {
+  return (a-b) > Number.EPSILON;
+}
+
+function lesserEnough(a,b) {
+  return (a-b) < -Number.EPSILON;
+}
+
+//Pack the given number of rows backwards
+//O(n)
+//Incorrect, suffers from local peaking
+function backwardsWidthPacker(rows, widths) {
+  let total = widths.reduce( (carry, width) => carry + width );
+  let passWidth = total/rows;
+  let rowLen = 0;
+
+  return widths.reverse().reduce((bestWidth, width) => {
+    rowLen += width;
+    if(rowLen > passWidth) {
+      let before = rowLen-width;
+      if(before > bestWidth)
+        bestWidth = rowLen;
+      total -= before;
+      rows--;
+      passWidth = total/rows;
+      rowLen = width;
+    }
+    return bestWidth;
+  }, passWidth);
+}
+
+/**
+ *  Widths are imagined to be individual rows. A pair of "rows" with the
+ *  smallest sum is concatenated until the desired number of rows is
+ *  reached, yieldling the smallest widths each row can be.
+ *
+ * O(widths.length^2)
+ *
+ * Note:
+ * suffers from local peaking since these are adjacent sums (greedy), causing
+ * there to be much larger summed peaks that don't shift smaller widths to
+ * adjacent "rows" that have available space as the algorithm progresses.
+ *
+ * @param  {array[int]} widths  widths of adjacent container elements
+ * @param  {int}        rows    rows in container
+ * @return {int}                minimum container width
+ */
+function minSumWidthPacker(widths, rows) {
+  widths = widths.slice(); //local copy of widths
+  while(widths.length > rows) { //widths.length-rows => O(widths.length)
+    //find smallest pair of widths
     let smallestPair = {
       pair: [],
       length: widths.reduce((total,width) => total+width)
     }
-    for( let i=1 ; i < widths.length ; i++ ) {
+    for( let i=1 ; i < widths.length ; i++ ) { //widths.length => O(widths.length)
       let length = widths[i-1]+widths[i];
       if(length < smallestPair.length) {
         smallestPair.pair = [i-1,i];
         smallestPair.length = length;
       }
     }
-    widths.splice(smallestPair.pair[0], smallestPair.pair.length, smallestPair.length);
+    //concat smallest pair of widths
+    widths.splice(smallestPair.pair[0], 2, smallestPair.length);
   }
-  return widths.reduce((carry, width) => { return (width > carry) ? width : carry; }, 0);
+  // return the smallest possible container size (i.e. the biggest smallest row width )
+  return widths.reduce((maxWidth, width) => { return (width > maxWidth) ? width : maxWidth; }, 0);
 }
 
-function equalEnough(a,b,e) {
-  return Math.abs(a-b) < e;
-}
 
-function greaterEnough(a,b,e) {
-  return (a-b) > e;
-}
-
-function lesserEnough(a,b,e) {
-  return (a-b) < -e;
-}
-
-//O(n^2) with componentPacking
-function evenComponentPacking(rows, widths) {
-  let epsilon = 0.00001;
+/**
+ *  Widths are imagined to be logically already placed in rows if fall
+ *  in one of the evenly cut rows. If a row lies on divider if could go
+ *  either way. The smallest sums between the undecided widths and logical
+ *  rows are decided, yeilding the smallest sums of each row.
+ *
+ * O(widths.length^2)
+ *
+ * Note:
+ * This solved the problem of minSumWidthPacker. By making packaged widths
+ * that are logically close and smaller than or equal to the minimum row
+ * length, the sum of undecided widths and rows produce the global minimum
+ * for each row given, reducing the container width to it's true minimum width.
+ *
+ * @param  {array[int]} widths  widths of adjacent container elements
+ * @param  {int}        rows    rows in container
+ * @return {int}                minimum container width
+ */
+function evenedMinSumWidthPacker(widths, rows) {
   let totalWidth = widths.reduce((total,width) => total+width);
 
   let rowWidth = 0;
   let currWidth = 0;
   let cutStep = totalWidth/rows;
 
-  return componentPacking(rows, widths.reduce((packedWidths, width) => {
+  let packedWidths = widths.reduce((packedWidths, width) => {
     rowWidth += width;
     currWidth += width;
 
-    if(equalEnough(currWidth,cutStep,epsilon)) {
+    if(equalEnough(currWidth,cutStep)) {
       packedWidths.push(rowWidth);
       rowWidth = 0;
       cutStep = (totalWidth*(Math.floor((currWidth*rows)/totalWidth)+1))/rows;
-    } else if(greaterEnough(currWidth,cutStep,epsilon)) {
+    } else if(greaterEnough(currWidth,cutStep)) {
       if(rowWidth != 0) {
         packedWidths.push(rowWidth-width);
       }
@@ -84,21 +116,30 @@ function evenComponentPacking(rows, widths) {
     }
 
     return packedWidths;
-  }, []));
+  }, []);
+
+  return minSumWidthPacker(packedWidths, rows); //O(width.length^2)
 }
 
-function packContainer() {
-  let children = document.currentScript.parentElement.getElementsByTagName("span");
-  let childrenWidths = [...children].map(element => element.offsetWidth);
 
+function packContainer(container, widthPackerMethod) {
+  let children = container.getElementsByTagName("span");
   let lineHeight = children[children.length-1].offsetHeight;
 
+  let childrenWidths = [...children].map(element => {
+    let childMargin = parseInt(window.getComputedStyle(element, null).getPropertyValue('margin-left').match(/\d+/)) +
+                      parseInt(window.getComputedStyle(element, null).getPropertyValue('margin-right').match(/\d+/)) ;
+    return element.offsetWidth+childMargin;
+  });
   let rows = Math.floor(Math.abs((children[0].offsetTop-children[children.length-1].offsetTop))/lineHeight + 1);
 
-  // let packWidth = packingWidth(rows,childrenWidths);
-  // let packWidth = componentPacking(rows,childrenWidths);
-  let packWidth = evenComponentPacking(rows,childrenWidths);
-  packWidth += 20; //temp workaround
+  let packWidth = widthPackerMethod(childrenWidths,rows);
+  // packWidth += 20; //temp workaround
 
-  return packWidth;
+  let containerPadding = parseInt(window.getComputedStyle(container, null).getPropertyValue('padding-left').match(/\d+/)) +
+                          parseInt(window.getComputedStyle(container, null).getPropertyValue('padding-right').match(/\d+/)) ;
+
+  packWidth += containerPadding;
+
+  container.setAttribute("style","width:"+packWidth+"px;");
 }
