@@ -127,41 +127,35 @@ function packContainer(container, widthPackerMethod) {
   widthPackerMethod = widthPackerMethod || this.widthPackerMethod;
 
   let children = container.getElementsByTagName("span");
-  let lineHeight = children[children.length-1].offsetHeight;
 
   let childrenWidths = [...children].map(element => {
     let childMargin = parseInt(window.getComputedStyle(element, null).getPropertyValue('margin-left').match(/\d+/)) +
                       parseInt(window.getComputedStyle(element, null).getPropertyValue('margin-right').match(/\d+/)) ;
     return element.getBoundingClientRect().width+childMargin;
   });
-  let rows = Math.floor(Math.abs((children[0].offsetTop-children[children.length-1].offsetTop))/lineHeight + 1);
+  let rows = Math.floor(Math.abs((children[0].getBoundingClientRect().top-children[children.length-1].getBoundingClientRect().top))/children[children.length-1].getBoundingClientRect().height + 1);
 
   let packWidth = widthPackerMethod(childrenWidths,rows);
 
   let containerPadding = parseInt(window.getComputedStyle(container, null).getPropertyValue('padding-left').match(/\d+/)) +
                           parseInt(window.getComputedStyle(container, null).getPropertyValue('padding-right').match(/\d+/)) ;
 
-  packWidth += containerPadding;
-  console.log(children[0].offsetTop);
-  console.log(children[children.length-1].offsetTop)
+  // packWidth += containerPadding;
 
-  return packWidth;
+  return packWidth + containerPadding;
 }
 
-window.addEventListener("load", function(event) {
+function beforeLoad(event) {
   let containers = document.getElementsByClassName("packing");
 
   [...containers].forEach((container) => {
     container.style.width = "";
     container.style.width = packContainer(container, evenedMinSumWidthPacker)+"px";
   });
-});
+}
 
-window.addEventListener("resize", function(event) {
-  let containers = document.getElementsByClassName("packing");
+//this only works when the script is at the bottom of the file
+//valid hack, use it if you dont want jumpy layout on load
+beforeLoad();
 
-  [...containers].forEach((container) => {
-    container.style.width = "";
-    container.style.width = packContainer(container, evenedMinSumWidthPacker)+"px";
-  });
-});
+window.addEventListener("resize", beforeLoad);
