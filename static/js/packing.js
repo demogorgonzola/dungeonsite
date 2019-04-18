@@ -162,7 +162,12 @@ function evenedMaxFillWidthPacker(widths, rows) {
   console.log(packedWidths.splits);
 
   //fill
-  let orderedSplits = packedWidths.splits.sort((a, b) => {return packedWidths[b] - packedWidths[a]});
+  let orderedSplits = packedWidths.splits.sort((a, b) => {
+    console.log(packedWidths);
+    return packedWidths.widths[b]-packedWidths.widths[a];
+  });
+
+  console.log(orderedSplits);
 
   orderedSplits.forEach((widthIndex) => {
     let left = packedWidths.widths[widthIndex-1];
