@@ -125,11 +125,65 @@ function evenedMinSumWidthPacker(widths, rows) {
     return packedWidths;
   }, []);
 
-  console.log(totalWidth/rows);
-  console.log(packedWidths);
-
   return minSumWidthPacker(packedWidths, rows); //O(width.length^2)
 }
+
+function evenedMaxFillWidthPacker(widths, rows) {
+  //even
+  let totalWidth = widths.reduce((total,width) => total+width);
+
+  let rowWidth = 0;
+  let currWidth = 0;
+  let cutStep = totalWidth/rows;
+
+  let packedWidths = widths.reduce((packedWidths, width) => {
+    rowWidth += width;
+    currWidth += width;
+
+    if(equalEnough(currWidth,cutStep)) {
+      packedWidths.widths.push(rowWidth);
+      rowWidth = 0;
+      cutStep = (totalWidth*(Math.floor((currWidth*rows)/totalWidth)+1))/rows;
+    } else if(greaterEnough(currWidth,cutStep)) {
+      packedWidths.widths.push(rowWidth-width);
+      packedWidths.widths.push(width);
+      packedWidths.splits.push(packedWidths.widths.length-1);
+      rowWidth = 0;
+      cutStep = (totalWidth*(Math.floor((currWidth*rows)/totalWidth)+1))/rows;
+    }
+
+    return packedWidths;
+  }, {
+    widths: [],
+    splits: []
+  });
+
+  console.log(packedWidths.widths);
+  console.log(packedWidths.splits);
+
+  //fill
+  let orderedSplits = packedWidths.splits.sort((a, b) => {return packedWidths[b] - packedWidths[a]});
+
+  orderedSplits.forEach((widthIndex) => {
+    let left = packedWidths.widths[widthIndex-1];
+    let right = packedWidths.widths[widthIndex+1];
+    let center = packedWidths.widths[widthIndex];
+    if(left <= right) {
+      packedWidths.widths[widthIndex-1] += center;
+    } else {
+      packedWidths.widths[widthIndex+1] += center;
+    }
+  });
+
+  packedWidths.splits.reverse().forEach((index) => {
+    packedWidths.widths.splice(index,1);
+  });
+
+  console.log(packedWidths.widths)
+
+  return packedWidths.widths.reduce((maxWidth, width) => { return (width > maxWidth) ? width : maxWidth; }, 0);
+}
+
 
 function pack(container, widthPackerMethod) {
   container.style.width = "";
@@ -160,8 +214,6 @@ function pack(container, widthPackerMethod) {
     containerWidth: container.getBoundingClientRect().width-containerPadding,
   }).rows;
 
-  console.log(childrenWidths);
-
   let packWidth = widthPackerMethod(childrenWidths, rows);
 
   container.style.width = (packWidth + containerPadding)+"px";
@@ -171,7 +223,7 @@ function repackAll(event) {
   let containers = document.getElementsByClassName("packing");
 
   [...containers].forEach((container) => {
-    pack(container, evenedMinSumWidthPacker);
+    pack(container, evenedMaxFillWidthPacker);
   });
 }
 
