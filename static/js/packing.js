@@ -11,6 +11,11 @@ function lesserEnough(a,b) {
   return (a-b) < -Number.EPSILON;
 }
 
+//quick extract
+function extractPropertyValue(element, property) {
+  return parseFloat(window.getComputedStyle(element, null).getPropertyValue(property).match(/\d+/));
+}
+
 //Pack the given number of rows backwards
 //O(n)
 //Incorrect, suffers from local peaking
@@ -68,6 +73,8 @@ function minSumWidthPacker(widths, rows) {
     //concat smallest pair of widths
     widths.splice(smallestPair.pair[0], 2, smallestPair.length);
   }
+
+  console.log(widths);
   // return the smallest possible container size (i.e. the biggest smallest row width )
   return widths.reduce((maxWidth, width) => { return (width > maxWidth) ? width : maxWidth; }, 0);
 }
@@ -118,16 +125,14 @@ function evenedMinSumWidthPacker(widths, rows) {
     return packedWidths;
   }, []);
 
+  console.log(totalWidth/rows);
+  console.log(packedWidths);
+
   return minSumWidthPacker(packedWidths, rows); //O(width.length^2)
 }
 
-
-function extractPropertyValue(element, property) {
-  return parseFloat(window.getComputedStyle(element, null).getPropertyValue(property).match(/\d+/));
-}
-
 function pack(container, widthPackerMethod) {
-  container.style.maxWidth = "";
+  container.style.width = "";
 
   let children = container.getElementsByTagName("span");
 
@@ -155,9 +160,11 @@ function pack(container, widthPackerMethod) {
     containerWidth: container.getBoundingClientRect().width-containerPadding,
   }).rows;
 
+  console.log(childrenWidths);
+
   let packWidth = widthPackerMethod(childrenWidths, rows);
 
-  container.style.maxWidth = (packWidth + containerPadding)+"px";
+  container.style.width = (packWidth + containerPadding)+"px";
 }
 
 function repackAll(event) {
