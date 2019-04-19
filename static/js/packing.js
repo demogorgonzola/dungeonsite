@@ -16,10 +16,26 @@ function extractPropertyValue(element, property) {
   return parseFloat(window.getComputedStyle(element, null).getPropertyValue(property).match(/\d+/));
 }
 
+
+function minRows(widths, containerWidth) {
+  let rowWidth = 0;
+
+  return widths.reduce((rows, width) => {
+    rowWidth += width;
+    if(rowWidth > containerWidth) {
+      rows++;
+      rowWidth = width;
+    }
+    return rows;
+  }, 1);
+}
+
 //Pack the given number of rows backwards
 //O(n)
 //Incorrect, suffers from local peaking
-function backwardsWidthPacker(rows, widths) {
+function backwardsWidthPacker(widths, containerWidth) {
+  let rows = minRows(widths, containerWidth);
+
   let total = widths.reduce( (carry, width) => carry + width );
   let passWidth = total/rows;
   let rowLen = 0;
@@ -55,7 +71,9 @@ function backwardsWidthPacker(rows, widths) {
  * @param  {int}        rows    rows in container
  * @return {int}                minimum container width
  */
-function minSumWidthPacker(widths, rows) {
+function minSumWidthPacker(widths, containerWidth) {
+  let rows = minRows(widths, containerWidth);
+
   widths = widths.slice(); //local copy of widths
   while(widths.length > rows) { //widths.length-rows => O(widths.length)
     //find smallest pair of widths
@@ -98,7 +116,9 @@ function minSumWidthPacker(widths, rows) {
  * @param  {int}        rows    rows in container
  * @return {int}                minimum container width
  */
-function evenedMinSumWidthPacker(widths, rows) {
+function evenedMinSumWidthPacker(widths, containerWidth) {
+  let rows = minRows(widths, containerWidth);
+
   let totalWidth = widths.reduce((total,width) => total+width);
 
   let rowWidth = 0;
@@ -128,62 +148,87 @@ function evenedMinSumWidthPacker(widths, rows) {
   return minSumWidthPacker(packedWidths, rows); //O(width.length^2)
 }
 
-function evenedMaxFillWidthPacker(widths, rows) {
+function evenedMaxFillWidthPacker(widths, containerWidth) {
   //even
+  let rows = minRows(widths, containerWidth);
+
   let totalWidth = widths.reduce((total,width) => total+width);
 
-  let rowWidth = 0;
-  let currWidth = 0;
-  let cutStep = totalWidth/rows;
+  containerWidth = totalWidth/rows;
 
-  let packedWidths = widths.reduce((packedWidths, width) => {
-    rowWidth += width;
-    currWidth += width;
+  let packedWidths = widths.reduce((pack, width) => {
+    let widths = pack.widths;
+    let splits = pack.splits;
+    let rowWidth = widths[widths.length-1] + width;
+    let prevSplit = pack.overflow//(pack.overflow) ? widths[splits[splits.length-1]] : 0;
 
-    if(equalEnough(currWidth,cutStep)) {
-      packedWidths.widths.push(rowWidth);
-      rowWidth = 0;
-      cutStep = (totalWidth*(Math.floor((currWidth*rows)/totalWidth)+1))/rows;
-    } else if(greaterEnough(currWidth,cutStep)) {
-      packedWidths.widths.push(rowWidth-width);
-      packedWidths.widths.push(width);
-      packedWidths.splits.push(packedWidths.widths.length-1);
-      rowWidth = 0;
-      cutStep = (totalWidth*(Math.floor((currWidth*rows)/totalWidth)+1))/rows;
+    if(greaterEnough(prevSplit+rowWidth,containerWidth)) {
+      widths.push(width);
+      if(!equalEnough(prevSplit+rowWidth-width, containerWidth)) {
+        splits.push(widths.length-1);
+        pack.overflow = (prevSplit+rowWidth)%containerWidth//true;
+        widths.push(0);
+      } else {
+        pack.overflow = (prevSplit+rowWidth)%containerWidth//true;
+      }
+    } else {
+      widths[widths.length-1] = rowWidth;
     }
 
-    return packedWidths;
+    return pack;
   }, {
-    widths: [],
-    splits: []
+    widths: [0],
+    splits: [],
+    overflow: 0//false
   });
-
-  console.log(packedWidths.widths);
-  console.log(packedWidths.splits);
 
   //fill
-  let orderedSplits = packedWidths.splits.sort((a, b) => {return packedWidths[b] - packedWidths[a]});
+  let orderedSplits = packedWidths.splits.slice().sort((a, b) => {
+    return packedWidths.widths[b] - packedWidths.widths[a]
+    // return packedWidths.widths[a] - packedWidths.widths[b]
+  }); //O(nlogn)
 
-  orderedSplits.forEach((widthIndex) => {
+  let badSplits = [];
+  for(let i=0; i<packedWidths.widths.length; i++) {
+    badSplits.push(false);
+  }
+
+  console.log("split");
+  console.log(rows);
+
+  console.log(orderedSplits)
+  console.log(packedWidths.widths);
+
+  while(orderedSplits.length > 0) {
+    let widthIndex = orderedSplits.shift();
     let left = packedWidths.widths[widthIndex-1];
     let right = packedWidths.widths[widthIndex+1];
-    let center = packedWidths.widths[widthIndex];
-    if(left <= right) {
-      packedWidths.widths[widthIndex-1] += center;
+    if(equalEnough(left,right)) {
+      badSplits[widthIndex] = true;
+    } else if(lesserEnough(left,right)) {
+      packedWidths.widths[widthIndex-1] += packedWidths.widths[widthIndex];
+      if(badSplits[widthIndex-2]) {
+        orderedSplits.unshift(widthIndex-2);
+        badSplits[widthIndex-2] = false;
+      }
     } else {
-      packedWidths.widths[widthIndex+1] += center;
+      packedWidths.widths[widthIndex+1] += packedWidths.widths[widthIndex];
+      if(badSplits[widthIndex+2]) {
+        orderedSplits.unshift(widthIndex+2);
+        badSplits[widthIndex+2] = false;
+      }
     }
-  });
+  };
 
   packedWidths.splits.reverse().forEach((index) => {
     packedWidths.widths.splice(index,1);
   });
 
-  console.log(packedWidths.widths)
+  console.log(packedWidths.splits);
+  console.log(packedWidths.widths);
 
   return packedWidths.widths.reduce((maxWidth, width) => { return (width > maxWidth) ? width : maxWidth; }, 0);
 }
-
 
 function pack(container, widthPackerMethod) {
   container.style.width = "";
@@ -200,21 +245,7 @@ function pack(container, widthPackerMethod) {
   let containerPadding =  extractPropertyValue(container, 'padding-left') +
                           extractPropertyValue(container, 'padding-right');
 
-
-  let rows = childrenWidths.reduce((carry,width) => {
-    carry.rowWidth += width;
-    if(carry.rowWidth > carry.containerWidth) {
-      carry.rows++;
-      carry.rowWidth = width;
-    }
-    return carry;
-  }, {
-    rows: 1,
-    rowWidth: 0,
-    containerWidth: container.getBoundingClientRect().width-containerPadding,
-  }).rows;
-
-  let packWidth = widthPackerMethod(childrenWidths, rows);
+  let packWidth = evenedMaxFillWidthPacker(childrenWidths, container.getBoundingClientRect().width-containerPadding);
 
   container.style.width = (packWidth + containerPadding)+"px";
 }
