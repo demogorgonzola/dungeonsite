@@ -230,8 +230,37 @@ function evenedMaxFillWidthPacker(widths, containerWidth) {
   return packedWidths.widths.reduce((maxWidth, width) => { return (width > maxWidth) ? width : maxWidth; }, 0);
 }
 
-//back to basiscs
-function flood(widths, containerWidth) {
+
+/**
+ * Complexity: O(n^2)
+ *
+ * Flood - Shift elements between adjacent rows until no previous row is larger
+ *          than a given row in the set, where the elements must remain in
+ *          left-to-right order.
+ *
+ * Even Variant - Shift elements between adjacent rows until no previous row,
+ *                excluding it's tail-end element, is larger than a given row
+ *                in the set, where elements must remain in left-to-right order.
+ *
+ * From a human perspective the flood algorithm is basically taking a "wall"
+ * and remaking into an incline that ascends from left to right.
+ *
+ * The variant aims to "even" the flood by changing how this incline is viewed.
+ * Instead of making a row taller relative to the previous row, it's made
+ * taller relative to the previous row excluding it's tail-end or "highest"
+ * element. That way each adjacent pair is evened out from left-to-right.
+ *
+ * Note: In the context of finding the most efficient packing width, this
+ * suffers from only ever observing adjacent rows. There can be massive drift
+ * between non-adjacent rows, where pushing down elements that create a larger
+ * row between an adjacent pair can create a smaller maximum row between all
+ * rows in the set.
+ *
+ * @param  {array[float]} widths    widths of adjacent container elements
+ * @param  {float} containerWidth   width of the container
+ * @return {float}                  new width of the container
+ */
+function evenFlood(widths, containerWidth) {
   widths = widths.slice(); //shallow copy for coolness
 
   let numRows = minRows(widths, containerWidth);
@@ -249,7 +278,56 @@ function flood(widths, containerWidth) {
 
   let rowIndex = 0;
   while(rowIndex >= 0) {
-    //original
+    if(rowIndex == rows.length-1) {
+      rowIndex--;
+    } else {
+      let row = rows[rowIndex];
+      let nextRow = rows[rowIndex+1];
+      let reduc = row.widths[row.widths.length-1];
+
+      if(row.length-reduc >= nextRow.length) {
+        let move = row.widths.pop();
+        row.length -= move;
+        nextRow.widths.unshift(move);
+        nextRow.length += move;
+        rowIndex++;
+      } else {
+        rowIndex--;
+      }
+    }
+  }
+
+  console.log(rows)
+
+  return rows.reduce(function(max, row) { return (max < row.length) ? row.length : max; }, 0);
+}
+
+
+/**
+ * evenFlood(), but with  
+ * @param  {[type]} widths         [description]
+ * @param  {[type]} containerWidth [description]
+ * @return {[type]}                [description]
+ */
+function globalEvenFlood(widths, containerWidth) {
+  widths = widths.slice(); //shallow copy for coolness
+
+  let numRows = minRows(widths, containerWidth);
+
+  let rows = [];
+  for(let i=0; i<numRows; i++) {
+    rows.push({
+      widths: [],
+      length: 0
+    });
+  }
+
+  rows[0].widths = widths;
+  rows[0].length = widths.reduce(function(total,item) { return total+item; }, 0);
+
+  let rowIndex = 0;
+  while(rowIndex >= 0) {
+    //evenFlood
     while(rowIndex >= 0) {
       if(rowIndex == rows.length-1) {
         rowIndex--;
@@ -270,6 +348,12 @@ function flood(widths, containerWidth) {
       }
     }
 
+    /*
+    Break the current row cofiguration.
+    Add the smallest sum tail-end element and adjacent row together that could
+    fit within the longest row.
+    Breaks stability if it can be packed further.
+     */
     let least = {
       pair: null,
       length: rows.reduce(function(max, row) { return (max < row.length) ? row.length : max; }, 0)
@@ -292,13 +376,7 @@ function flood(widths, containerWidth) {
     }
   }
 
-  console.log(rows)
-
   return rows.reduce(function(max, row) { return (max < row.length) ? row.length : max; }, 0);
-}
-
-function minSum() {
-
 }
 
 function pack(container, widthPackerMethod) {
@@ -324,7 +402,7 @@ function pack(container, widthPackerMethod) {
 function repackAll(event) {
   let containers = document.getElementsByClassName("packing");
 
-  [...containers].forEach((container) => {
+  [...containers].forEach((container)v => {
     pack(container, evenedMaxFillWidthPacker);
   });
 }
