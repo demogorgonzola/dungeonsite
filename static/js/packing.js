@@ -230,6 +230,77 @@ function evenedMaxFillWidthPacker(widths, containerWidth) {
   return packedWidths.widths.reduce((maxWidth, width) => { return (width > maxWidth) ? width : maxWidth; }, 0);
 }
 
+//back to basiscs
+function flood(widths, containerWidth) {
+  widths = widths.slice(); //shallow copy for coolness
+
+  let numRows = minRows(widths, containerWidth);
+
+  let rows = [];
+  for(let i=0; i<numRows; i++) {
+    rows.push({
+      widths: [],
+      length: 0
+    });
+  }
+
+  rows[0].widths = widths;
+  rows[0].length = widths.reduce(function(total,item) { return total+item; }, 0);
+
+  let rowIndex = 0;
+  while(rowIndex >= 0) {
+    //original
+    while(rowIndex >= 0) {
+      if(rowIndex == rows.length-1) {
+        rowIndex--;
+      } else {
+        let row = rows[rowIndex];
+        let nextRow = rows[rowIndex+1];
+        let reduc = row.widths[row.widths.length-1];
+
+        if(row.length-reduc >= nextRow.length) {
+          let move = row.widths.pop();
+          row.length -= move;
+          nextRow.widths.unshift(move);
+          nextRow.length += move;
+          rowIndex++;
+        } else {
+          rowIndex--;
+        }
+      }
+    }
+
+    let least = {
+      pair: null,
+      length: rows.reduce(function(max, row) { return (max < row.length) ? row.length : max; }, 0)
+    }
+    for(let i=1; i<rows.length; i++) {
+      let length = rows[i-1].widths[rows[i-1].widths.length-1]+rows[i].length;
+      if(length < least.length) {
+        least.pair = [i-1,i];
+        least.length = length;
+      }
+    }
+    if(least.pair) {
+      let row = rows[least.pair[0]];
+      let nextRow = rows[least.pair[1]];
+      let move = row.widths.pop();
+      row.length -= move;
+      nextRow.widths.unshift(move);
+      nextRow.length += move;
+      rowIndex = least.pair[0]-1;
+    }
+  }
+
+  console.log(rows)
+
+  return rows.reduce(function(max, row) { return (max < row.length) ? row.length : max; }, 0);
+}
+
+function minSum() {
+
+}
+
 function pack(container, widthPackerMethod) {
   container.style.width = "";
 
@@ -245,7 +316,7 @@ function pack(container, widthPackerMethod) {
   let containerPadding =  extractPropertyValue(container, 'padding-left') +
                           extractPropertyValue(container, 'padding-right');
 
-  let packWidth = evenedMaxFillWidthPacker(childrenWidths, container.getBoundingClientRect().width-containerPadding);
+  let packWidth = flood(childrenWidths, container.getBoundingClientRect().width-containerPadding);
 
   container.style.width = (packWidth + containerPadding)+"px";
 }
