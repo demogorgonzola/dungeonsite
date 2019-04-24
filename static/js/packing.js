@@ -256,9 +256,9 @@ function evenedMaxFillWidthPacker(widths, containerWidth) {
  * row between an adjacent pair can create a smaller maximum row between all
  * rows in the set.
  *
- * @param  {array[float]} widths    widths of adjacent container elements
- * @param  {float} containerWidth   width of the container
- * @return {float}                  new width of the container
+ * @param  {array[float]} widths          widths of adjacent container elements
+ * @param  {float}        containerWidth  width of the container
+ * @return {float}                        new width of the container
  */
 function evenFlood(widths, containerWidth) {
   widths = widths.slice(); //shallow copy for coolness
@@ -297,17 +297,20 @@ function evenFlood(widths, containerWidth) {
     }
   }
 
-  console.log(rows)
-
   return rows.reduce(function(max, row) { return (max < row.length) ? row.length : max; }, 0);
 }
 
 
 /**
- * evenFlood(), but with  
- * @param  {[type]} widths         [description]
- * @param  {[type]} containerWidth [description]
- * @return {[type]}                [description]
+ * evenFlood(), but with an awareness of non-adjacent row "eveness".
+ * The added functionality attempts to break the stable row configuration of
+ * evenFlow(). If it can't then it's assumed                           so that it can keep
+ * searching for a smaller container width. The break happens with the smallest
+ * su
+ *
+ * @param  {array[float]} widths          widths of adjacent container elements
+ * @param  {float}        containerWidth  width of the container
+ * @return {float}                        new width of the container
  */
 function globalEvenFlood(widths, containerWidth) {
   widths = widths.slice(); //shallow copy for coolness
@@ -357,7 +360,7 @@ function globalEvenFlood(widths, containerWidth) {
     let least = {
       pair: null,
       length: rows.reduce(function(max, row) { return (max < row.length) ? row.length : max; }, 0)
-    }
+    };
     for(let i=1; i<rows.length; i++) {
       let length = rows[i-1].widths[rows[i-1].widths.length-1]+rows[i].length;
       if(length < least.length) {
@@ -379,6 +382,12 @@ function globalEvenFlood(widths, containerWidth) {
   return rows.reduce(function(max, row) { return (max < row.length) ? row.length : max; }, 0);
 }
 
+/**
+ * [pack description]
+ * @param  {[type]} container         [description]
+ * @param  {[type]} widthPackerMethod [description]
+ * @return {[type]}                   [description]
+ */
 function pack(container, widthPackerMethod) {
   container.style.width = "";
 
@@ -394,16 +403,21 @@ function pack(container, widthPackerMethod) {
   let containerPadding =  extractPropertyValue(container, 'padding-left') +
                           extractPropertyValue(container, 'padding-right');
 
-  let packWidth = flood(childrenWidths, container.getBoundingClientRect().width-containerPadding);
+  let packWidth = widthPackerMethod(childrenWidths, container.getBoundingClientRect().width-containerPadding);
 
   container.style.width = (packWidth + containerPadding)+"px";
 }
 
+/**
+ * [repackAll description]
+ * @param  {[type]} event [description]
+ * @return {[type]}       [description]
+ */
 function repackAll(event) {
   let containers = document.getElementsByClassName("packing");
 
-  [...containers].forEach((container)v => {
-    pack(container, evenedMaxFillWidthPacker);
+  [...containers].forEach((container) => {
+    pack(container, globalEvenFlood);
   });
 }
 
@@ -411,4 +425,5 @@ function repackAll(event) {
 //valid hack, use it if you dont want jumpy layout on load
 repackAll();
 
+//repack if screen is resized
 window.addEventListener("resize", repackAll);
