@@ -329,9 +329,9 @@ function globalEvenFlood(widths, containerWidth) {
   rows[0].length = widths.reduce(function(total,item) { return total+item; }, 0);
 
   let rowIndex = 0;
-  while(rowIndex >= 0) {
+  while(rowIndex >= 0) { //complexity: O(n^2)
     //evenFlood
-    while(rowIndex >= 0) {
+    while(rowIndex >= 0) { //complexity: O(n^2)
       if(rowIndex == rows.length-1) {
         rowIndex--;
       } else {
@@ -352,16 +352,20 @@ function globalEvenFlood(widths, containerWidth) {
     }
 
     /*
-    Break the current row cofiguration.
-    Add the smallest sum tail-end element and adjacent row together that could
-    fit within the longest row.
-    Breaks stability if it can be packed further.
+    The smallest combination between last element of the previous row and a row
+    is taken to potentially break stability, if there exists a smaller
+    container width, to create a new peak. Smallest peak is taken, since if not
+    taken, could possibly create a future peak that needs to be broken but
+    cannot.
      */
+    let longestIndex = rows.reduce((max, row, index) => { //complexity: O(n)
+      return (rows[max] < row.length) ? index : max;
+    }, 0);
     let least = {
       pair: null,
-      length: rows.reduce(function(max, row) { return (max < row.length) ? row.length : max; }, 0)
+      length: rows[longestIndex]
     };
-    for(let i=1; i<rows.length; i++) {
+    for(let i=longestIndex+1; i<rows.length; i++) { //complexity: O(n)
       let length = rows[i-1].widths[rows[i-1].widths.length-1]+rows[i].length;
       if(length < least.length) {
         least.pair = [i-1,i];
@@ -375,7 +379,7 @@ function globalEvenFlood(widths, containerWidth) {
       row.length -= move;
       nextRow.widths.unshift(move);
       nextRow.length += move;
-      rowIndex = least.pair[0]-1;
+      rowIndex = leat.pair[1];
     }
   }
 
