@@ -328,10 +328,13 @@ function globalEvenFlood(widths, containerWidth) {
   rows[0].widths = widths;
   rows[0].length = widths.reduce(function(total,item) { return total+item; }, 0);
 
+  let count = 0;
+
   let rowIndex = 0;
   while(rowIndex >= 0) { //complexity: O(n^2)
     //evenFlood
     while(rowIndex >= 0) { //complexity: O(n^2)
+      count++;
       if(rowIndex == rows.length-1) {
         rowIndex--;
       } else {
@@ -339,7 +342,15 @@ function globalEvenFlood(widths, containerWidth) {
         let nextRow = rows[rowIndex+1];
         let reduc = row.widths[row.widths.length-1];
 
-        if(row.length-reduc >= nextRow.length) {
+        // console.log('---start---')
+        // console.log(row);
+        // console.log(reduc);
+        // console.log(row.length-reduc);
+        // console.log(nextRow);
+        // console.log(nextRow.length);
+        // console.log('---end---')
+        if(row.widths.length != 0 && !lesserEnough(row.length-reduc, nextRow.length)) {
+        // if(row.length-reduc >= nextRow.length) {
           let move = row.widths.pop();
           row.length -= move;
           nextRow.widths.unshift(move);
@@ -359,11 +370,11 @@ function globalEvenFlood(widths, containerWidth) {
     cannot.
      */
     let longestIndex = rows.reduce((max, row, index) => { //complexity: O(n)
-      return (rows[max] < row.length) ? index : max;
+      return (rows[max].length < row.length) ? index : max;
     }, 0);
     let least = {
       pair: null,
-      length: rows[longestIndex]
+      length: rows[longestIndex].length
     };
     for(let i=longestIndex+1; i<rows.length; i++) { //complexity: O(n)
       let length = rows[i-1].widths[rows[i-1].widths.length-1]+rows[i].length;
@@ -379,7 +390,7 @@ function globalEvenFlood(widths, containerWidth) {
       row.length -= move;
       nextRow.widths.unshift(move);
       nextRow.length += move;
-      rowIndex = leat.pair[1];
+      rowIndex = least.pair[0]-1;//least.pair[1];
     }
   }
 

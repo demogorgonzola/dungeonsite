@@ -27,24 +27,6 @@ Persuasion
 Deception
 Investigation
 Survival
-Athletics
-Acrobatics
-Sleight of Hand
-Stealth
-Arcana
-History
-Investigation
-Nature
-Religion
-Animal Handling
-Insight
-Medicine
-Perception
-Survival
-Deception
-Intimidation
-Performance
-Persuasion
 {{% /termbox %}}
 
 {{% termbox class="dnd-character-languages" childClass="dnd-character-language" termClassPrefix="dnd-language" %}}
