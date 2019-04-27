@@ -227,9 +227,10 @@ function evenedMaxFillWidthPacker(widths, containerWidth) {
   console.log(packedWidths.splits);
   console.log(packedWidths.widths);
 
-  return packedWidths.widths.reduce((maxWidth, width) => { return (width > maxWidth) ? width : maxWidth; }, 0);
+  return packedWidths.widths.reduce((maxWidth, width) => {
+    return (width > maxWidth) ? width : maxWidth;
+  }, 0);
 }
-
 
 /**
  * Complexity: O(n^2)
@@ -256,15 +257,16 @@ function evenedMaxFillWidthPacker(widths, containerWidth) {
  * row between an adjacent pair can create a smaller maximum row between all
  * rows in the set.
  *
- * @param  {array[float]} widths          widths of adjacent container elements
- * @param  {float}        containerWidth  width of the container
- * @return {float}                        new width of the container
+ * @param  {Array}    widths          widths of adjacent container elements
+ * @param  {Number}   containerWidth  width of the container
+ * @return {Number}                   new width of the container
  */
 function evenFlood(widths, containerWidth) {
   widths = widths.slice(); //shallow copy for coolness
 
   let numRows = minRows(widths, containerWidth);
 
+  //construct potential rows
   let rows = [];
   for(let i=0; i<numRows; i++) {
     rows.push({
@@ -272,47 +274,51 @@ function evenFlood(widths, containerWidth) {
       length: 0
     });
   }
-
   rows[0].widths = widths;
-  rows[0].length = widths.reduce(function(total,item) { return total+item; }, 0);
+  rows[0].length = widths.reduce(function(total,item) {
+    return total+item;
+  }, 0);
 
   let rowIndex = 0;
-  while(rowIndex >= 0) {
-    if(rowIndex == rows.length-1) {
+  while(rowIndex >= 0) { //complexity: O(n^2)
+    let row = rows[rowIndex];
+    let lastElement = row.widths[row.widths.length-1];
+    let nextRow = rows[rowIndex+1];
+
+    //why do if statement breaks have to look so ugly
+    if( !nextRow ||
+        !lastElement ||
+        lesserEnough(row.length-lastElement, nextRow.length)
+      ) {
       rowIndex--;
     } else {
-      let row = rows[rowIndex];
-      let nextRow = rows[rowIndex+1];
-      let reduc = row.widths[row.widths.length-1];
-
-      if(row.length-reduc >= nextRow.length) {
-        let move = row.widths.pop();
-        row.length -= move;
-        nextRow.widths.unshift(move);
-        nextRow.length += move;
-        rowIndex++;
-      } else {
-        rowIndex--;
-      }
+      let move = row.widths.pop();
+      row.length -= move;
+      nextRow.widths.unshift(move);
+      nextRow.length += move;
+      rowIndex += ((rowIndex+1 == rows.length-1) ? 0 : 1);
     }
   }
 
-  return rows.reduce(function(max, row) { return (max < row.length) ? row.length : max; }, 0);
+  return rows.reduce(function(max, row) {
+    return (max < row.length) ? row.length : max;
+  }, 0);
 }
 
 
 /**
+ * complexity: O(n^2)
+ *
  * evenFlood(), but with an awareness of non-adjacent row "eveness".
- * The added functionality attempts to break the stable row configuration of
- * evenFlow(). If it can't then it's assumed                           so that it can keep
- * searching for a smaller container width. The break happens with the smallest
- * su
+ * This algorithm attempts to create a stable row config, then break the config
+ * to favor deconstructing the longest row, and repeat the process until there
+ * are no more breaks that can yield a shorter container width.
  *
  * @param  {array[float]} widths          widths of adjacent container elements
  * @param  {float}        containerWidth  width of the container
  * @return {float}                        new width of the container
  */
-function globalEvenFlood(widths, containerWidth) {
+function chippingEvenFlood(widths, containerWidth) {
   widths = widths.slice(); //shallow copy for coolness
 
   let numRows = minRows(widths, containerWidth);
@@ -324,58 +330,50 @@ function globalEvenFlood(widths, containerWidth) {
       length: 0
     });
   }
-
   rows[0].widths = widths;
-  rows[0].length = widths.reduce(function(total,item) { return total+item; }, 0);
-
-  let count = 0;
+  rows[0].length = widths.reduce(function(total,item) {
+    return total+item;
+  }, 0);
 
   let rowIndex = 0;
   while(rowIndex >= 0) { //complexity: O(n^2)
-    //evenFlood
+    //evenFlood()
     while(rowIndex >= 0) { //complexity: O(n^2)
-      count++;
-      if(rowIndex == rows.length-1) {
+      let row = rows[rowIndex];
+      let lastElement = row.widths[row.widths.length-1];
+      let nextRow = rows[rowIndex+1];
+
+      //why do if statement breaks have to look so ugly
+      if( !nextRow ||
+          !lastElement ||
+          lesserEnough(row.length-lastElement, nextRow.length)
+        ) {
         rowIndex--;
       } else {
-        let row = rows[rowIndex];
-        let nextRow = rows[rowIndex+1];
-        let reduc = row.widths[row.widths.length-1];
-
-        // console.log('---start---')
-        // console.log(row);
-        // console.log(reduc);
-        // console.log(row.length-reduc);
-        // console.log(nextRow);
-        // console.log(nextRow.length);
-        // console.log('---end---')
-        if(row.widths.length != 0 && !lesserEnough(row.length-reduc, nextRow.length)) {
-        // if(row.length-reduc >= nextRow.length) {
-          let move = row.widths.pop();
-          row.length -= move;
-          nextRow.widths.unshift(move);
-          nextRow.length += move;
-          rowIndex++;
-        } else {
-          rowIndex--;
-        }
+        let move = row.widths.pop();
+        row.length -= move;
+        nextRow.widths.unshift(move);
+        nextRow.length += move;
+        rowIndex += ((rowIndex+1 == rows.length-1) ? 0 : 1);
       }
     }
 
     /*
-    The smallest combination between last element of the previous row and a row
-    is taken to potentially break stability, if there exists a smaller
-    container width, to create a new peak. Smallest peak is taken, since if not
-    taken, could possibly create a future peak that needs to be broken but
-    cannot.
+    A combination between last element of the previous row and a row is taken
+    to potentially break stability, if there exists a smaller container width.
+    The smallest combination is taken to allows us to explore all possible
+    breaks without creaking unbreakable future peaks.
+    Note: Exploring all breaks may be inefficient, explore further.
      */
     let longestIndex = rows.reduce((max, row, index) => { //complexity: O(n)
       return (rows[max].length < row.length) ? index : max;
     }, 0);
+    //the least pair must be shorter than the longest row
     let least = {
       pair: null,
       length: rows[longestIndex].length
     };
+    //find least pair under the longest row
     for(let i=longestIndex+1; i<rows.length; i++) { //complexity: O(n)
       let length = rows[i-1].widths[rows[i-1].widths.length-1]+rows[i].length;
       if(length < least.length) {
@@ -390,18 +388,22 @@ function globalEvenFlood(widths, containerWidth) {
       row.length -= move;
       nextRow.widths.unshift(move);
       nextRow.length += move;
-      rowIndex = least.pair[0]-1;//least.pair[1];
+      rowIndex = least.pair[(least.pair[1] == rows.length-1) ? 0 : 1];
     }
   }
 
-  return rows.reduce(function(max, row) { return (max < row.length) ? row.length : max; }, 0);
+  //return
+  return rows.reduce(function(max, row) {
+    return (max < row.length) ? row.length : max;
+  }, 0);
 }
 
 /**
- * [pack description]
- * @param  {[type]} container         [description]
- * @param  {[type]} widthPackerMethod [description]
- * @return {[type]}                   [description]
+ * Extract and normalize the container and it's elements from the document,
+ * then pack the container using a packing method and set contianers width to
+ * the packing width.
+ * @param  {Object}   container         DOM Object of the container
+ * @param  {Function} widthPackerMethod packing method
  */
 function pack(container, widthPackerMethod) {
   container.style.width = "";
@@ -418,21 +420,25 @@ function pack(container, widthPackerMethod) {
   let containerPadding =  extractPropertyValue(container, 'padding-left') +
                           extractPropertyValue(container, 'padding-right');
 
-  let packWidth = widthPackerMethod(childrenWidths, container.getBoundingClientRect().width-containerPadding);
+  let packWidth = widthPackerMethod(
+    childrenWidths,
+    container.getBoundingClientRect().width-containerPadding
+  );
 
   container.style.width = (packWidth + containerPadding)+"px";
 }
 
 /**
- * [repackAll description]
- * @param  {[type]} event [description]
- * @return {[type]}       [description]
+ * execute the default packing function on all containers with the "packing"
+ * class tag
+ * @param  {Object} event the resize event
  */
 function repackAll(event) {
+  console.log('a')
   let containers = document.getElementsByClassName("packing");
 
   [...containers].forEach((container) => {
-    pack(container, globalEvenFlood);
+    pack(container, chippingEvenFlood);
   });
 }
 
@@ -440,5 +446,12 @@ function repackAll(event) {
 //valid hack, use it if you dont want jumpy layout on load
 repackAll();
 
-//repack if screen is resized
-window.addEventListener("resize", repackAll);
+
+//repackscreen is resized
+if(!packingResizeTimer) { //init packingResizeTimer if there currently isn't one
+  var packingResizeTimer;
+}
+window.addEventListener("resize", function(e) {
+  clearTimeout(packingResizeTimer);
+  packingResizeTimer = setTimeout(repackAll,100); //resize on timer to reduce
+});

@@ -9,6 +9,7 @@ $characterProfileWidth: 300px;
 .dnd-character-abilityscore {
   padding: 0 4px;
   text-align: right;
+  width: 75px;
 }
 
 .dnd-character-skill,
@@ -33,6 +34,10 @@ $characterProfileWidth: 300px;
     float: right;
     clear: right;
     margin: 0;
+  }
+
+  .dnd-character-abilityscore {
+    width: 80px;
   }
 
   .dnd-character-abilityscores,
