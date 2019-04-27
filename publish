@@ -1,16 +1,18 @@
 #!/usr/bin/env bash
 
-if [[ $(git status -s) ]]
-then
-    echo "The working directory is dirty. Please commit any pending changes."
-    exit 1;
-fi
+# if [[ $(git status -s) ]]
+# then
+#     echo "The working directory is dirty. Please commit any pending changes."
+#     exit 1;
+# fi
 
 echo "Removing existing files"
 rm -rf public/*
 
 echo "Generating site"
 hugo
+cp customdomains public/CNAME
 
 echo "Updating gh-pages branch"
-cd public && git add --all && git commit -m "Publishing to gh-pages (publish.sh)"
+cd public
+git add --all && git commit -m "Putting out the fresh bakes..."
