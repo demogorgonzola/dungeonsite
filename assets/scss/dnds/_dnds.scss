@@ -1,4 +1,4 @@
-$characterProfileWidth: 300px;
+$characterProfileWidth: 200px;
 
 .dnd-character-profile {
   text-align: center;
@@ -46,14 +46,12 @@ $characterProfileWidth: 300px;
   .dnd-character-tools,
   .dnd-character-spells {
     display: inline-block;
-    // float:right;
     max-width: calc(100% - #{$characterProfileWidth});
   }
 
   .dnd-character-abilityscores {
     display: block;
-    // float:right;
-    // margin-left: ((700px-440px)/2); //temp
+    max-width: 240px;
   }
 }
 

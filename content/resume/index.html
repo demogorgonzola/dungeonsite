@@ -2,76 +2,6 @@
 title: "Resume"
 ---
 
-<style media="screen">
-  .entry-content::after { /* keep floating content in flow, have div respond */
-    content: "";
-    clear: both;
-    display: table;
-  }
-
-  .entry-content ul {
-    list-style-type: circle;
-  }
-
-  .entry-content p {
-    margin: 0px;
-  }
-
-  .entry-content h1, .entry-content h2,
-  .entry-content h3, .entry-content h4,
-  .entry-content h5, .entry-content h6 ::after {
-    margin-top: 0px;
-    font-size: 1em;
-  }
-
-  h3, h4, h5, h6 {
-    display: inline;
-  }
-
-  .important {
-    font-weight: bold;
-  }
-
-  .subtext {
-    font-style: italic;
-  }
-
-  .right {
-    display: inline;
-    float: right;
-  }
-
-  .resume-header {
-    text-align: center;
-    margin-bottom: 1.5em;
-  }
-
-  .resume-subject {
-    text-transform: uppercase;
-    font-weight: bold;
-    margin-bottom: 1.5em;
-  }
-
-  .resume-object {
-    padding-bottom: 0.5em;
-    margin-bottom: 1.0em;
-    border-bottom: 1px black solid;
-  }
-
-  @media only screen and (min-width: 731px) {
-    .resume-subject {
-      float: left;
-      width: 25%;
-      padding: 0px 10px 0px 10px;
-    }
-
-    .resume-object {
-      float: left;
-      width: 75%;
-    }
-  }
-</style>
-
 <div class="resume-header">
   <h1>Full Stack Developer</h1>
   <p>James M. Thornton</p>
@@ -80,12 +10,15 @@ title: "Resume"
 </div>
 
 <p class="resume-subject">Objective</p>
-<p class="resume-object">Rapidly produce iterative solutions for any kind of software through meticulous research and decisive strategy.</p>
+<span class="resume-object">
+  Rapidly produce iterative solutions for any kind of software through meticulous research and decisive strategy.
+  <br/>
+</span>
 
 <h2 class="resume-subject">Experience</h2>
 <span class="resume-object">
   <h3>Conscious Cleanse/Helping Hands Websites</h3> <p class="right">June - November 2018</p>
-  <p >RaddCreative, Fort Collins, Colorado</> <p class="right">Javascript, PHP, Wordpress, Ember</p>
+  <p>RaddCreative, Fort Collins, Colorado</p> <p class="right">Javascript, PHP, Wordpress, Ember</p>
   <dl>
     <dd>
       Constructed fleshed out network API’s as a mixture of general case and useful case endpoints.
@@ -94,7 +27,6 @@ title: "Resume"
       Performed consistent full stack feature development and bug-fixes on an iterative, weekly cycle.
     </dd>
   </dl>
-
 
   <dl>
     <dt>

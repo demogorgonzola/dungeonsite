@@ -11,9 +11,19 @@ function lesserEnough(a,b) {
   return (a-b) < -Number.EPSILON;
 }
 
-//quick extract
+/**
+ * [extractPropertyValue description]
+ * @param  {[type]} element  [description]
+ * @param  {[type]} property [description]
+ * @return {[type]}          [description]
+ */
 function extractPropertyValue(element, property) {
-  return parseFloat(window.getComputedStyle(element, null).getPropertyValue(property).match(/\d+/));
+  return parseFloat(
+    window
+    .getComputedStyle(element, null)
+    .getPropertyValue(property)
+    .match(/\d+/)
+  );
 }
 
 
