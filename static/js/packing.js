@@ -1,18 +1,48 @@
-//epsilon equality funcs
+/*
+packing.js - Efficient/Experimental Packing Algorithms
+------------------------------------------------------
+What is the most efficient width a container can pack it's elements under the
+constraints that...
+  - Elements are atomic
+  - Elements retain their order
+  - Container height is immutable
+?
+
+Algorithms under these conditions have the strong possibility of being greedy.
+Reasoned since the first obvious, though aproximal solution, is to do a binary
+search between the non-atomic optimal width and the given container width with
+a non-decimal delta threshold (1px).
+
+Notes:
+- Some elements can surpass the given container width and will therefore
+surpass the shortest possible width. This case only appears when the a screen
+is too small to display a Element atomically. This can considered undefined
+behavior, but making the algorithm more robust may be worthwhile.
+- The number of rows under the given width, i.e. a function of height, is
+present in all current solutions and may be integral all solution, but hasn't
+been proven to be required.
+ */
+
+//epsilon equals
 function equalEnough(a,b) {
   return Math.abs(a-b) < Number.EPSILON;
 }
 
+//epsilon greater-than
 function greaterEnough(a,b) {
   return (a-b) > Number.EPSILON;
 }
 
+//epsilon lesser-than
 function lesserEnough(a,b) {
   return (a-b) < -Number.EPSILON;
 }
 
 /**
  * extract the actual property number of a DOM element
+ *
+ * Note: used mostly to extract px values, super weak, needs a fix later
+ *
  * @param  {DOM Element} element  DOM element
  * @param  {String}      property property of the DOM element
  * @return {Number}               DOM element property numerical value
@@ -27,8 +57,11 @@ function extractPropertyNumber(element, property) {
 }
 
 /**
- * the minimum number of rows a collection of ordered
- * widths can fit in given a container width
+ * the minimum number of rows a collection of ordered widths can fit in given a
+ * container width
+ *
+ * O(widths.length)
+ *
  * @param  {Number[]} widths          widths of adjacent container widths
  * @param  {Number}   containerWidth  width of the container
  * @return {Number}                   the minimum number of rows
@@ -47,11 +80,21 @@ function minRows(widths, containerWidth) {
 }
 
 /**
- *
- * Pack the given container backwards starting with the most
- * optimistic/shortest width the adjacent elements could fit if splitting
- * elements were allowed. Grow the width to accomadate each sebsequent row
- * from the bottom-up until all fit.
+ * The complexity of this would be...
+   - optimisticNonAtomicWidth = totalWidthOfElements / rowsUnderGivenWidth
+   O( numberOfElements * log( givenContainerWidth - optimisticNonAtomicWidth ) )
+ * @param  {[type]} widths         [description]
+ * @param  {[type]} containerWidth [description]
+ * @return {[type]}                [description]
+ */
+function fastWidthChecker(widths, containerWidth) {
+
+}
+
+/**
+ * Pack the given container backwards excluding the property that all elements
+ * are atomic. This starts packing with the most optimistic container width and
+ * grows it while incrementally accomodating the atomic element property.
  *
  * O(widths.length)
  *
@@ -60,9 +103,9 @@ function minRows(widths, containerWidth) {
  * for a given container width. Actually there's nothing that packing this
  * backwards solved compared to packing it forward, they most likely will come
  * out to be different, but still innaccurate results. Dividng the rows
- * recursively after designating elements to a row doesn't solve the problem of
- * having an oversaturated row since the top row is always more than likely to
- * have the largest width, causing a slope that slants inward top-down.
+ * recursively after designating elements to a row has the problem of having an
+ * oversaturated top row since the algorithm ends with the largest row almost
+ * always overflowing.
  *
  * @param  {Number[]} widths          widths of adjacent container elements
  * @param  {Number}   containerWidth  width of the container
@@ -76,7 +119,7 @@ function optimisticBackwardsPack(widths, containerWidth) {
   let rowLen = 0;
 
   //get best container width of all rows except the top row
-  let containerWidth = widths.reverse().reduce((bestWidth, width) => {
+  let bestWidth = widths.reverse().reduce((bestWidth, width) => {
     rowLen += width;
     //cut into own row if current row passes optimistic width
     if(greaterEnough(rowLen, total/rows)) {
@@ -90,19 +133,20 @@ function optimisticBackwardsPack(widths, containerWidth) {
     return bestWidth;
   }, total/rows);
   //do last check on top row
-  containerWidth = (rowLen > containerWidth) ? rowLen : containerWidth;
+  bestWidth = (rowLen > bestWidth) ? rowLen : bestWidth;
 
-  return containerWidth;
+  return bestWidth;
 }
 
 /**
- *  Widths are imagined to be individual rows. A pair of "rows" with the
- *  smallest sum is concatenated until the desired number of rows is
- *  reached, yieldling the smallest widths each row can be.
+ *  Find the smallest sum of adjacent pairs and concatenate them. Repeat until
+ *  there are a number of synthesized elements equal to the number of rows the
+ *  number of elements and given container width give.
  *
  *  O(widths.length^2)
  *
  *  Note:
+ *
  *  suffers from local peaking since these are adjacent sums (greedy), causing
  *  there to be much larger summed peaks that don't shift smaller widths to
  *  adjacent "rows" that have available space as the algorithm progresses.
@@ -480,11 +524,10 @@ function pack(container, widthPackerMethod) {
  * @param  {Object} event the resize event
  */
 function repackAll(event) {
-  console.log('a')
   let containers = document.getElementsByClassName("packing");
 
   [...containers].forEach((container) => {
-    pack(container, backwardsPack);//chippingEvenFlood);
+    pack(container, optimisticBackwardsPack);//chippingEvenFlood);
   });
 }
 
