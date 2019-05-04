@@ -576,7 +576,7 @@ function repackAll(event) {
   let containers = document.getElementsByClassName("packing");
 
   [...containers].forEach((container) => {
-    pack(container, aproximalBinarySearch); //default: chipperEvenFlood
+    pack(container, chipperEvenFlood); //default: chipperEvenFlood
   });
 }
 
@@ -591,5 +591,5 @@ if(!packingResizeTimer) {
 }
 window.addEventListener("resize", function(e) {
   clearTimeout(packingResizeTimer);
-  packingResizeTimer = setTimeout(repackAll, 0); //default: 100
+  packingResizeTimer = setTimeout(repackAll, 100); //default: 100
 });
