@@ -584,7 +584,6 @@ function repackAll(event) {
 //valid hack, use it if you dont want jumpy layout on load
 repackAll();
 
-
 //repackscreen is resized
 if(!packingResizeTimer) {
   var packingResizeTimer;
