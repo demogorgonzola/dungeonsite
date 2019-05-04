@@ -96,14 +96,6 @@ function minRows(widths, containerWidth) {
  * @param  {Number}   [deltaThreshold=1]  threshold when to stop seaching, in px
  * @return {Number}                       the minimum number of rows
  */
-
-/**
- * [aproximalBinarySearch description]
- * @param  {[type]} widths             [description]
- * @param  {[type]} containerWidth     [description]
- * @param  {Number} [deltaThreshold=1] [description]
- * @return {[type]}                    [description]
- */
 function aproximalBinarySearch(widths, containerWidth, deltaThreshold=1) {
   widths = widths.slice();
   let numRows = minRows(widths, containerWidth);

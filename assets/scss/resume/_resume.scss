@@ -36,26 +36,15 @@ h3, h4, h5, h6 {
   margin-bottom: 1.5em;
 }
 
-.resume-subject {
-  text-transform: uppercase;
-  font-weight: bold;
-  margin-bottom: 1.5em;
-}
+@media only screen and (min-width: 426px) {
+  .resume-subject {
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-bottom: 1.5em;
+  }
 
-.resume-object {
-  padding-bottom: 0.5em;
-  margin-bottom: 1.0em;
-}
-
-@media only screen and (min-width: 731px) {
-  // .resume-subject {
-  //   float: left;
-  //   width: 25%;
-  //   padding: 0px 10px 0px 10px;
-  // }
-  //
-  // .resume-object {
-  //   float: left;
-  //   width: 75%;
-  // }
+  .resume-object {
+    padding-bottom: 0.5em;
+    margin-bottom: 1.0em;
+  }
 }
