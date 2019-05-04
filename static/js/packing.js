@@ -80,15 +80,54 @@ function minRows(widths, containerWidth) {
 }
 
 /**
- * The complexity of this would be...
-   - optimisticNonAtomicWidth = totalWidthOfElements / rowsUnderGivenWidth
-   O( numberOfElements * log( givenContainerWidth - optimisticNonAtomicWidth ) )
- * @param  {[type]} widths         [description]
- * @param  {[type]} containerWidth [description]
- * @return {[type]}                [description]
+ * Binary search between the optimistic non-atomic width and the given
+ * container width under a delta threshold of 1px.
+ *
+ * O(widths.length * log(containerWidth - optimisticWidth))
+ * - optimisticWidth = sum(widths) / minRows(widths, containerWidth)
+ *
+ * Note:
+ * This may be the fastest algorithm to find the the optimal packing width;
+ * however, this is still aproximal. Though for anything practical this may be
+ * the best choice.
+ *
+ * @param  {Number[]} widths              widths of adjacent container widths
+ * @param  {Number}   containerWidth      width of the container
+ * @param  {Number}   [deltaThreshold=1]  threshold when to stop seaching, in px
+ * @return {Number}                       the minimum number of rows
  */
-function fastWidthChecker(widths, containerWidth) {
 
+/**
+ * [aproximalBinarySearch description]
+ * @param  {[type]} widths             [description]
+ * @param  {[type]} containerWidth     [description]
+ * @param  {Number} [deltaThreshold=1] [description]
+ * @return {[type]}                    [description]
+ */
+function aproximalBinarySearch(widths, containerWidth, deltaThreshold=1) {
+  widths = widths.slice();
+  let numRows = minRows(widths, containerWidth);
+  let total = widths.reduce((total,width) => total+width);
+
+  let optimisticWidth = total/numRows;
+
+  let lastValid = containerWidth;
+  let validityCheck = (position) => {
+    let positionNumRows = minRows(widths, position) == numRows;
+    if(positionNumRows) lastValid = position;
+    return positionNumRows;
+  }
+
+  //binary search
+  let left = optimisticWidth;
+  let right = containerWidth;
+  while(greaterEnough(right-left, deltaThreshold)) {
+    let position = left+((right-left)/2);
+    if(validityCheck(position)) right = position;
+    else left = position;
+  }
+
+  return lastValid;
 }
 
 /**
@@ -169,7 +208,7 @@ function minSumConcat(widths, containerWidth) {
       pair: [],
       length: widths.reduce((total,width) => total+width)
     }
-    for( let i=1 ; i < widths.length ; i++ ) { //widths.length => O(widths.length)
+    for( let i=1 ; i < widths.length ; i++ ) { //O(widths.length)
       let length = widths[i-1]+widths[i];
       if(length < smallestPair.length) {
         smallestPair.pair = [i-1,i];
@@ -180,8 +219,10 @@ function minSumConcat(widths, containerWidth) {
     widths.splice(smallestPair.pair[0], 2, smallestPair.length);
   }
 
-  // return the smallest possible container size (i.e. the biggest smallest row width )
-  return widths.reduce((maxWidth, width) => { return (width > maxWidth) ? width : maxWidth; }, 0);
+  // return the largest row
+  return widths.reduce((maxWidth, width) => {
+    return (width > maxWidth) ? width : maxWidth;
+  }, 0);
 }
 
 /**
@@ -242,12 +283,26 @@ function optimisticMinSumConcat(widths, containerWidth) {
 }
 
 /**
+ * Divide elements into the maximum number of rows as if they were non-atomic.
+ * Elements that exist in the same row that share no other rows are
+ * concatenated. Elements that exist between multiple rows are inserted from
+ * largest to smallest to it's smallest neighbor. If the neighbors are equal
+ * size, then they are inserted as soon as another one neighbor becomes larger
+ * than another. Effectively trying to even out the optimistic rows.
+ *
+ * O(widths.length^2)
+ *
+ * Note:
+ * This is variant on the last iteration approaches the problem differently,
+ * but the optimistic cut characteristic is now the primary problem. It still
+ * can still have the tail or head of an optimistic row needing to be moved,
+ * causing intial ordering of the algorithm to be useless.
  *
  * @param  {Number[]} widths          widths of adjacent container elements
  * @param  {Number}   containerWidth  width of the container
  * @return {Number}                   new width of the container
  */
-function optimisticDependencyMinSumConcat(widths, containerWidth) {
+function optimisticDependencyEvenFill(widths, containerWidth) {
   widths = widths.slice(); //shallow copy for coolness
   let numRows = minRows(widths, containerWidth); //find height constraint
 
@@ -290,6 +345,7 @@ function optimisticDependencyMinSumConcat(widths, containerWidth) {
     badSplits.push(false);
   }
 
+  //fill according to dependency
   while(orderedSplits.length > 0) {
     let widthIndex = orderedSplits.shift();
     let left = packedWidths.widths[widthIndex-1];
@@ -520,7 +576,7 @@ function repackAll(event) {
   let containers = document.getElementsByClassName("packing");
 
   [...containers].forEach((container) => {
-    pack(container, optimisticDependencyMinSumConcat); //default: chipperEvenFlood
+    pack(container, aproximalBinarySearch); //default: chipperEvenFlood
   });
 }
 
