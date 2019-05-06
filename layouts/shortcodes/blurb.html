@@ -1,7 +1,0 @@
-{{ $subject := .Get "subject" }}
-{{ $date := .Get "date" | default "" }}
-{{ $location := .Get "location" | default "" }}
-{{ $extra := .Get "extra" | default "" }}
-<h3 style="display:block-inline">{{ $subject }}</h3> <p style="float:right; display: inline-block;">{{ $date }}</p>
-<p></p>
-<span>{{ $location }}</span> <p style="float:right; display: inline-block;">{{ $extra }}</p>

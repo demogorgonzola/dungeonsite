@@ -44,6 +44,8 @@ li {
   display: inline-block;
 }
 
+@import 'datelocationtag';
+
 @import 'dnds/dnds';
 
-@import 'resume/resume';
+@import 'resume';

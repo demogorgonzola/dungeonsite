@@ -1,0 +1,61 @@
+.datelocationtag-description,
+.datelocationtag-location,
+.datelocationtag-date {
+  margin: 0;
+  padding: 0;
+}
+
+.datelocationtag-wrapper {
+  display: table;
+  width:100%;
+}
+
+.datelocationtag-descriptionlocation {
+  display: table-cell;
+
+  .datelocationtag-location {
+    display: initial;
+  }
+}
+
+.datelocationtag-locationdate {
+  display: table-cell;
+  width: 35%;
+  text-align: right;
+  vertical-align: middle;
+
+  .datelocationtag-location {
+    display: none;
+  }
+}
+
+@media only screen and (min-width: 426px) {
+  .datelocationtag-wrapper {
+    display: initial;
+  }
+
+  .datelocationtag-descriptionlocation {
+    display: initial;
+
+    .datelocationtag-location {
+      display: none;
+    }
+  }
+
+  .datelocationtag-locationdate {
+    display: table;
+    width: 100%;
+    text-align: initial;
+    vertical-align: initial;
+
+    .datelocationtag-location {
+      display: table-cell;
+    }
+  }
+
+  .datelocationtag-date {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+}
