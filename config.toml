@@ -1,5 +1,5 @@
 baseURL = "https://demogorgonzola.io"
-title = "Abyss 88"
+title = "9th lvl Truestrike"
 # for smart copyright line, leave this blank and check [params.copyright]
 copyright = ""
 
@@ -22,8 +22,8 @@ enableEmoji = true
 defaultContentLanguage = "en"
 
 [params.info]
-description = "The place Jimmy shits out his great stuff :D" # TODO
-title404 = "Nothing's here!"
+description = "I aim to do things. I put those things here." # TODO
+title404 = "You're request was eaten by a Ixitxachitl! Turn back!"
 
 [params.assets]
 favicon = "favicon.ico"
