@@ -8,7 +8,6 @@
 
 .resume-sections {
   display: table;
-  border-spacing: 10px;
 }
 
 .resume-section {
@@ -24,10 +23,10 @@
   text-align: center;
 }
 
-
 @media only screen and (min-width: 426px) {
   .resume-section-title,
   .resume-section-content {
     display: table-cell;
+    padding: 5px;
   }
 }

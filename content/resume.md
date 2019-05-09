@@ -39,7 +39,7 @@ Rapidly produce iterative solutions for any kind of software through meticulous 
 
 {{< datelocationtag
   description="Image Identification and Classification of Plankton Species"
-  date="September - October 2015"
+  date="September - September 2015"
   location="National Data Science Bowl (2015)"
   >}}
 
