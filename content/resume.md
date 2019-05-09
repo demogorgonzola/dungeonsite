@@ -20,8 +20,8 @@ Rapidly produce iterative solutions for any kind of software through meticulous 
 ===
 
 {{< datelocationtag
-  description="Conscious Cleanse/Helping Hands Websites"
-  date="June - November 2018"
+  description="Conscious Cleanse / Helping Hands Websites"
+  date="Jun - Nov 2018"
   location="RaddCreative, Fort Collins, Colorado"
   >}}
 
@@ -30,7 +30,7 @@ Rapidly produce iterative solutions for any kind of software through meticulous 
 
 {{< datelocationtag
   description="Spotify Powered Local Area Network Website"
-  date="June - August 2015"
+  date="Jun - Aug 2015"
   location="AlleyCat Cafe, Fort Collins, Colorado"
   >}}
 
@@ -39,7 +39,7 @@ Rapidly produce iterative solutions for any kind of software through meticulous 
 
 {{< datelocationtag
   description="Image Identification and Classification of Plankton Species"
-  date="September - September 2015"
+  date="Sept - Sept 2015"
   location="National Data Science Bowl (2015)"
   >}}
 

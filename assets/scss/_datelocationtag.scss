@@ -1,62 +1,37 @@
-// .datelocationtag-description,
-// .datelocationtag-location,
-// .datelocationtag-date {
-//   margin: 0;
-//   padding: 0;
-// }
-//
-// .datelocationtag-wrapper {
-//   display: table;
-//   width:100%;
-// }
-//
-// .datelocationtag-descriptionlocation {
-//   display: table-cell;
-//
-//   .datelocationtag-location {
-//     display: initial;
-//   }
-// }
-//
-// .datelocationtag-locationdate {
-//   display: table-cell;
-//   width: 35%;
-//   text-align: right;
-//   vertical-align: middle;
-//
-//   .datelocationtag-location {
-//     display: none;
-//   }
-// }
+.datelocationtag-description,
+.datelocationtag-location,
+.datelocationtag-date {
+  margin: 0;
+  padding: 0;
+}
 
-// @media only screen and (min-width: 426px) {
-  .datelocationtag-wrapper {
-    display: initial;
-  }
+.datelocationtag-description {
+  display: table-cell;
+  padding: 0 5px 0 0;
+}
 
-  .datelocationtag-descriptionlocation {
-    display: initial;
+.datelocationtag-date {
+  display: table-cell;
+  width: 35%;
+  padding: 0 5px;
+  text-align: center;
+  vertical-align: middle;
+}
 
-    .datelocationtag-location {
-      display: none;
-    }
-  }
+.datelocationtag-location {
 
-  .datelocationtag-locationdate {
-    display: table;
-    width: 100%;
-    text-align: initial;
-    vertical-align: initial;
+}
 
-    .datelocationtag-location {
-      display: table-cell;
-    }
+@media only screen and (min-width: 426px) {
+  .datelocationtag-description {
+    padding: 0 5px;
   }
 
   .datelocationtag-date {
-    display: table-cell;
-    width: 45%;
-    text-align: center;
-    vertical-align: middle;
   }
-// }
+
+  .datelocationtag-date {
+    width: 30%;
+    text-align: right;
+  }
+}

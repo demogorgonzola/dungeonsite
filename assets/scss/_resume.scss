@@ -2,12 +2,16 @@
   list-style-type: circle;
 }
 
-.resume-header {
-  text-align: center;
+.resume-header,
+.resume-section {
+  margin: 0 0 10px 0;
 }
 
-.resume-sections {
-  display: table;
+.resume-header {
+  text-align: center;
+  p {
+    margin: 0;
+  }
 }
 
 .resume-section {
@@ -27,6 +31,6 @@
   .resume-section-title,
   .resume-section-content {
     display: table-cell;
-    padding: 5px;
+    padding: 0 10px;
   }
 }

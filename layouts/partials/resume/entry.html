@@ -1,4 +1,4 @@
-{{ $delimiter := .Params.Delimiter }}
+{{- $delimiter := .Params.Delimiter -}}
 
 <div class="resume-header" style="text-align:center;">
   <h2>{{.Params.jobTitle}}</h2>
@@ -7,19 +7,17 @@
   <p>{{.Params.email}}</p>
 </div>
 
-<div class="resume-sections">
-{{ $sectionSplits := apply (split .Content (print "<p>" $delimiter $delimiter "</p>")) "trim" "." " \t\n\r" }}
-{{ $sectionSplits := apply $sectionSplits "split" "." $delimiter }}
-{{ range $sectionSplits }}
-  {{ $title := index . 0 }}
-  {{ $subject := index . 1 }}
+{{- $sectionSplits := apply (split .Content (print "<p>" $delimiter $delimiter "</p>")) "trim" "." " \t\n\r" -}}
+{{- $sectionSplits := apply $sectionSplits "split" "." (print "<p>" $delimiter "</p>") -}}
+{{- range $sectionSplits -}}
+  {{- $title := trim (index . 0) " \t\n\r" -}}
+  {{- $subject := trim (index . 1) " \t\n\r" -}}
   <span class="resume-section">
     <span class="resume-section-title">
-      {{ markdownify $title }}
+      {{- markdownify $title -}}
     </span>
     <span class="resume-section-content">
-      {{ markdownify $subject }}
+      {{- markdownify $subject -}}
     </span>
   </span>
-{{ end }}
-</div>
+{{- end -}}

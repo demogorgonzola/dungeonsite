@@ -2,7 +2,7 @@
 {{ $date := .Get "date" | default "" }}
 {{ $location := .Get "location" | default "" }}
 {{ $class := .Get "class" | default "" }}
-<div class="datelocationtag {{ $class }}">
+<!-- <div class="datelocationtag {{ $class }}">
   <span class="datelocationtag-wrapper">
     <span class="datelocationtag-descriptionlocation">
       <h6 class="datelocationtag-description">{{ $description }}</h6>
@@ -13,4 +13,10 @@
       <p class="datelocationtag-date">{{ $date }}</p>
     </span>
   </span>
+</div> -->
+
+<div class="datelocationtag {{ $class }}">
+  <h6 class="datelocationtag-description">{{ $description }}</h6>
+  <p class="datelocationtag-date">{{ $date }}</p>
+  <i class="datelocationtag-location">{{ $location }}</i>
 </div>
