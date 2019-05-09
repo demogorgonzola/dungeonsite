@@ -1,4 +1,4 @@
-<div class='container entry-content clear-fix'>
+<div class='container entry-content clear-fix {{ .Title | urlize }}'>
   {{ $path := (split (path.Join .File.Dir .File.TranslationBaseName) "/") | complement (slice "index") }}
 
   {{ $paths := slice "" }}

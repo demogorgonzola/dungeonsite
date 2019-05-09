@@ -4,17 +4,20 @@ jobTitle: "Full Stack Developer"
 name: "James M. Thornton"
 phone: "+1 (281) 705-3226"
 email: "solverjt+jobs@gmail.com"
-date: "{{.Lastmod}}"
-type: "resume"
+delimiter: "==="
 ---
 
 ### Objective
 
+===
+
 Rapidly produce iterative solutions for any kind of software through meticulous research and decisive strategy.
 
----
+======
 
 ### Experience
+
+===
 
 {{< datelocationtag
   description="Conscious Cleanse/Helping Hands Websites"
@@ -44,16 +47,20 @@ Rapidly produce iterative solutions for any kind of software through meticulous 
 * Developed a method of classification based on the relative distance between distinct “corners” of the organism and its predicted “center”.
 
 
----
+======
 
 ### Education
+
+===
 
 <p class="dated-text-subject">Colorado State University</p><p class="dated-text-date">December 2014</p>
 Bachelors of Science in Computer Science(3.0), minor in Mathematics (Major: 3.0, Minor: 3.4)
 
----
+======
 
 ### Skills
+
+===
 
 Languages: HTML, CSS, Javascript, PHP, SQL, Python, C, C++, R, Java
 

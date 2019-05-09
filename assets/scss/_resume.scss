@@ -1,7 +1,33 @@
-.entry-content ul {
+.resume ul {
   list-style-type: circle;
 }
 
-.entry-content {
+.resume-header {
+  text-align: center;
+}
+
+.resume-sections {
   display: table;
+  border-spacing: 10px;
+}
+
+.resume-section {
+  display: table-row;
+}
+
+.resume-section-title,
+.resume-section-content {
+  display: block;
+}
+
+.resume-section-title {
+  text-align: center;
+}
+
+
+@media only screen and (min-width: 426px) {
+  .resume-section-title,
+  .resume-section-content {
+    display: table-cell;
+  }
 }
