@@ -1,3 +1,23 @@
 <div class='container entry-content clear-fix'>
-  {{ .Content }}
+  {{ $path := (split (path.Join .File.Dir .File.TranslationBaseName) "/") | complement (slice "index") }}
+
+  {{ $paths := slice "" }}
+  {{ range $path }}
+    {{ $firstElement := (index $paths 0) }}
+    {{ $tPath := (path.Join $firstElement .) }}
+    {{ $paths = (slice $tPath) | append $paths }}
+  {{ end }}
+
+  {{ $entryLayoutFile := "None" }}
+  {{ range $paths }}
+    {{ if (fileExists (path.Join "layouts" "partials" . "entry.html")) | and (eq $entryLayoutFile "None") }}
+      {{ $entryLayoutFile = . }}
+    {{ end }}
+  {{ end }}
+
+  {{ if $entryLayoutFile | eq "None" }}
+    {{ .Content }}
+  {{ else }}
+    {{ partial (path.Join $entryLayoutFile "entry.html") . }}
+  {{ end }}
 </div>

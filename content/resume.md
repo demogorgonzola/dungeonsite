@@ -1,12 +1,11 @@
 ---
 title: "Resume"
----
-
-## Full Stack Developer
-James M. Thornton
-+1 (281) 705-3226
-solverjt+jobs@gmail.com
-
+jobTitle: "Full Stack Developer"
+name: "James M. Thornton"
+phone: "+1 (281) 705-3226"
+email: "solverjt+jobs@gmail.com"
+date: "{{.Lastmod}}"
+type: "resume"
 ---
 
 ### Objective

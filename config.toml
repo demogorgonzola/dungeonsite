@@ -22,8 +22,8 @@ enableEmoji = true
 defaultContentLanguage = "en"
 
 [params.info]
-description = "I aim to do things. I put those things here." # TODO
-title404 = "You're request was eaten by a Ixitxachitl! Turn back!"
+description = "Generally useless, specifically useful." # TODO
+title404 = "Your request was eaten by a Ixitxachitl! Turn back!"
 
 [params.assets]
 favicon = "favicon.ico"
