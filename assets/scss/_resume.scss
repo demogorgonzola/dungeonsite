@@ -34,3 +34,46 @@
     padding: 0 10px;
   }
 }
+
+
+//////////////////////
+
+
+
+.exp-blurb .title,
+.exp-blurb .date,
+.exp-blurb .location {
+  margin: 0;
+  padding: 0;
+}
+
+.exp-blurb .title {
+  display: table-cell;
+  padding: 0 5px 0 0;
+}
+
+.exp-blurb .date {
+  display: table-cell;
+  width: 35%;
+  padding: 0 5px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.exp-blurb .location {
+
+}
+
+@media only screen and (min-width: 426px) {
+  .exp-blurb .title {
+    padding: 0 5px;
+  }
+
+  .exp-blurb .date  {
+  }
+
+  .exp-blurb .location {
+    width: 30%;
+    text-align: right;
+  }
+}

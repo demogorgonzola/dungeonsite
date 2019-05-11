@@ -1,0 +1,11 @@
+{{ $spittles := split (trim .Inner " \t\n\r") "\n" }}
+{{ $spittles := apply $spittles "split" "." ":"}}
+
+{{ $class := .Get "class" | default "" }}
+<div class="blurb {{ $class }}">
+  {{ range $spittles }}
+    {{ $class := (trim (index . 0) " \t\n\r") | urlize }}
+    {{ $spit := (trim (index . 1) " \t\n\r") }}
+    <span class="{{ $class }}">{{- markdownify $spit -}}</span>
+  {{ end }}
+</div>
