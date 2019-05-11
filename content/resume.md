@@ -15,6 +15,20 @@ Rapidly produce iterative solutions for any kind of software through meticulous 
 
 ======
 
+### Education
+
+===
+
+{{< blurb class="edu-blurb" >}}
+Title: ###### Colorado State University
+Date: December 2014
+{{< /blurb >}}
+
+Bachelors of Science in Computer Science, minor in Mathematics
+</p>
+
+======
+
 ### Experience
 
 ===
@@ -45,33 +59,3 @@ Location: National Data Science Bowl (2015)
 
 * Analyzed efficiency of a myriad of clustering algorithms to more accurately include, and identify systematic error in, lower quality photos.
 * Developed a method of classification based on the relative distance between distinct “corners” of the organism and its predicted “center”.
-
-======
-
-### Education
-
-===
-
-{{< blurb class="exp-blurb" >}}
-Title: ###### Colorado State University
-Date: December 2014
-{{< /blurb >}}
-
-Bachelors of Science in Computer Science, minor in Mathematics (Major: 3.0, Minor: 3.4)
-</p>
-
-======
-
-### Skills
-
-===
-
-Languages: HTML, CSS, Javascript, PHP, SQL, Python, C, C++, R, Java
-
-Frameworks: WordPress, Laravel, Vue/React, Ember, Cypress
-
-Self-starter on entirely new areas of development, deploying breakneck learning and testing methods.
-
-Operated in test-driven and behavior-driven development cycles
-
-Handled remote communication and development of projects

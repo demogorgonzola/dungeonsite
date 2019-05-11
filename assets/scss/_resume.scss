@@ -16,6 +16,10 @@
 
 .resume-section {
   display: table-row;
+  
+  h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+  }
 }
 
 .resume-section-title,
@@ -26,19 +30,6 @@
 .resume-section-title {
   text-align: center;
 }
-
-@media only screen and (min-width: 426px) {
-  .resume-section-title,
-  .resume-section-content {
-    display: table-cell;
-    padding: 0 10px;
-  }
-}
-
-
-//////////////////////
-
-
 
 .exp-blurb .title,
 .exp-blurb .date,
@@ -61,10 +52,31 @@
 }
 
 .exp-blurb .location {
+  font-style: italic;
+}
 
+.edu-blurb {
+  display: table;
+  width: 100%;
+}
+
+.edu-blurb .title {
+  display: table-cell;
+}
+
+.edu-blurb .date {
+  display: table-cell;
+  text-align: right;
+  padding: 0 5px;
 }
 
 @media only screen and (min-width: 426px) {
+  .resume-section-title,
+  .resume-section-content {
+    display: table-cell;
+    padding: 0 10px;
+  }
+
   .exp-blurb .title {
     padding: 0 5px;
   }
