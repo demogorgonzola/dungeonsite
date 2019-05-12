@@ -4,21 +4,21 @@
 
 .resume-header,
 .resume-section {
-  margin: 0 0 10px 0;
+  margin: 0 0 1.5em 0;
 }
 
 .resume-header {
   text-align: center;
   p {
-    margin: 0;
+    margin: 0 0 0.5em 0;
   }
 }
 
 .resume-section {
   display: table-row;
-  
-  h1, h2, h3, h4, h5, h6 {
-    margin: 0;
+
+  p, h1, h2, h3, h4, h5, h6 {
+    margin: 0 0 0.5em 0;
   }
 }
 
@@ -38,6 +38,11 @@
   padding: 0;
 }
 
+.exp-blurb {
+  display: table;
+  width: 100%;
+}
+
 .exp-blurb .title {
   display: table-cell;
   padding: 0 5px 0 0;
@@ -45,13 +50,14 @@
 
 .exp-blurb .date {
   display: table-cell;
-  width: 35%;
+  width: 45%;
   padding: 0 5px;
   text-align: center;
   vertical-align: middle;
 }
 
 .exp-blurb .location {
+  display: table-row;
   font-style: italic;
 }
 
@@ -82,10 +88,10 @@
   }
 
   .exp-blurb .date  {
+    width: 30%;
+    text-align: right;
   }
 
   .exp-blurb .location {
-    width: 30%;
-    text-align: right;
   }
 }

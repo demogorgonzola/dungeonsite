@@ -25,6 +25,8 @@ Date: December 2014
 {{< /blurb >}}
 
 Bachelors of Science in Computer Science, minor in Mathematics
+
+(Major: 3.0, Minor: 3.4)
 </p>
 
 ======
@@ -34,28 +36,44 @@ Bachelors of Science in Computer Science, minor in Mathematics
 ===
 
 {{% blurb class="exp-blurb" %}}
-  Title: ###### Conscious Cleanse / Helping Hands Websites
+  Title: ###### Conscious Cleanse
   Date: Jun - Nov 2018
   Location: RaddCreative, Fort Collins, Colorado
 {{% /blurb %}}
 
-* Constructed fleshed out network API’s as a mixture of general case and useful case endpoints.
-* Performed consistent full stack feature development and bug-fixes on an iterative, weekly cycle.
+* Subscription-based Checkout Solution backed by a Ember-based frontend and processed though a WooCommerce server module.
+* Site-wide Journaling Widget built with an in-house version of a theoretical Ember feature, Routable Components.
+
 
 {{% blurb class="exp-blurb" %}}
-  Title: ###### Spotify Powered Local Area Network Website
-  Date: Jun - Aug 2015
-  Location: AlleyCat Cafe, Fort Collins, Colorado
+  Title: ###### Helping Hands
+  Date: Aug - Nov 2018
+  Location: RaddCreative, Fort Collins, Colorado
 {{% /blurb %}}
 
-* Worked closely with client developing iterative requirement documents to effectively design and construct a product.
-* Composed many libraries and network APIs to work in unison between multiple languages under RPC and REST principle network calls.
+* User-registration Page persisting data via a Vue component to a Wordpress/MariaDB backend under constraints of a statically generated site.
 
 {{% blurb class="exp-blurb" %}}
-Title: ###### Image Identification and Classification of Plankton Species
-Date: Sept - Sept 2015
-Location: National Data Science Bowl (2015)
+Title: ###### RaddCreative / Internal Work
+Date: Oct - Nov 2018
+Location: RaddCreative, Fort Collins, Colorado
 {{% /blurb %}}
 
-* Analyzed efficiency of a myriad of clustering algorithms to more accurately include, and identify systematic error in, lower quality photos.
-* Developed a method of classification based on the relative distance between distinct “corners” of the organism and its predicted “center”.
+* In-House Database Auditor delivered as a Wordpress plugin; periodically reporting changes by targeted queries via SSH calls.
+* Static development blog spun by Hugo aiming to educate clients on web development to encourage agency in the development cycle.
+
+======
+
+### Skills
+
+===
+
+_Languages_ : HTML, CSS, Javascript, PHP, SQL, Python, C, C++, R, Java
+
+_Frameworks_ : WordPress, Laravel, Vue/React, Ember, Cypress
+
+Self-starter on entirely new areas of development.
+
+Operates in behavior-driven development cycles for integration testing.
+
+Handled remote communication and development of projects.

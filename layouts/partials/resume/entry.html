@@ -20,9 +20,4 @@
       {{ $subject | markdownify }}
     </span>
   </span>
-
-  <script type="text/javascript">
-    console.log({{ printf "%#v" (markdownify $title) }});
-    console.log({{ printf "%#v" (markdownify $subject) }});
-  </script>
 {{- end -}}
