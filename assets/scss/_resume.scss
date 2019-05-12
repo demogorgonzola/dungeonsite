@@ -16,6 +16,7 @@
 
 .resume-section {
   display: table-row;
+  margin: 0 0 1em 0;
 
   p, h1, h2, h3, h4, h5, h6 {
     margin: 0 0 0.5em 0;
@@ -25,6 +26,14 @@
 .resume-section-title,
 .resume-section-content {
   display: block;
+}
+
+.resume-section-title {
+  margin: 0.5em 0;
+}
+
+.resume-section-content {
+  border-bottom: 1px black solid;
 }
 
 .resume-section-title {

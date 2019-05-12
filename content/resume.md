@@ -1,5 +1,6 @@
 ---
 title: "Resume"
+date: 2019-05-11T23:06:11-06:00
 jobTitle: "Full Stack Developer"
 name: "James M. Thornton"
 phone: "+1 (281) 705-3226"

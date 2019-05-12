@@ -14,10 +14,16 @@
   {{- $subject := trim (index . 1) " \t\n\r" -}}
   <span class="resume-section">
     <span class="resume-section-title">
-      {{ $title | markdownify }}
+      {{ $title | safeHTML }}
     </span>
     <span class="resume-section-content">
-      {{ $subject | markdownify }}
+      {{ $subject | safeHTML }}
     </span>
   </span>
+
+  <script type="text/javascript">
+    console.log({{ $title }});
+    console.log({{ $subject }});
+  </script>
+
 {{- end -}}
