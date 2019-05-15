@@ -2,105 +2,123 @@
   list-style-type: circle;
 }
 
+//
+
 .resume-header,
 .resume-section {
-  margin: 0 0 1.5em 0;
+  // margin: 0 0 1.5em 0;
 }
 
 .resume-header {
   text-align: center;
   p {
-    margin: 0 0 0.5em 0;
+    margin: 0 0 0.2em 0;
   }
 }
 
 .resume-section {
   display: table-row;
-  margin: 0 0 1em 0;
 
-  p, h1, h2, h3, h4, h5, h6 {
+  h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+  }
+
+  p {
     margin: 0 0 0.5em 0;
   }
 }
 
+//
+
+.resume-section.education {
+  p {
+    margin: 0 auto;
+    width: 200px;
+    text-align: center;
+  }
+
+  p:last-child {
+    margin-bottom: 0.5em;
+  }
+}
+
+//
+
 .resume-section-title,
 .resume-section-content {
   display: block;
+  vertical-align: top;
 }
 
 .resume-section-title {
-  margin: 0.5em 0;
-}
-
-.resume-section-content {
-  border-bottom: 1px black solid;
-}
-
-.resume-section-title {
+  padding: 0px 10px;
+  margin: 20px 0;
   text-align: center;
 }
 
-.exp-blurb .title,
-.exp-blurb .date,
-.exp-blurb .location {
+.resume-section-content {
+  padding: 20px 10px;
+  padding-top: 0;
+  border-bottom: 1px black solid;
+}
+
+//
+
+.resume-blurb .title,
+.resume-blurb .date,
+.resume-blurb .location {
   margin: 0;
   padding: 0;
 }
 
-.exp-blurb {
+.resume-blurb {
   display: table;
   width: 100%;
 }
 
-.exp-blurb .title {
+.resume-blurb .title {
   display: table-cell;
   padding: 0 5px 0 0;
 }
 
-.exp-blurb .date {
+.resume-blurb .date {
   display: table-cell;
   width: 45%;
-  padding: 0 5px;
   text-align: center;
   vertical-align: middle;
 }
 
-.exp-blurb .location {
+.resume-blurb .location {
   display: table-row;
   font-style: italic;
 }
 
-.edu-blurb {
-  display: table;
-  width: 100%;
-}
-
-.edu-blurb .title {
-  display: table-cell;
-}
-
-.edu-blurb .date {
-  display: table-cell;
-  text-align: right;
-  padding: 0 5px;
-}
+//
 
 @media only screen and (min-width: 426px) {
   .resume-section-title,
   .resume-section-content {
     display: table-cell;
-    padding: 0 10px;
   }
 
-  .exp-blurb .title {
-    padding: 0 5px;
+  //
+
+  .resume-section.education {
+    p {
+      margin: 0;
+      width: auto;
+      text-align: left;
+    }
+
+    p:last-child {
+      margin-bottom: 0.5em;
+    }
   }
 
-  .exp-blurb .date  {
+  //
+
+  .resume-blurb .date  {
     width: 30%;
     text-align: right;
-  }
-
-  .exp-blurb .location {
   }
 }

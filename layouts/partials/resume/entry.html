@@ -12,7 +12,7 @@
 {{- range $sectionSplits -}}
   {{- $title := trim (index . 0) " \t\n\r" -}}
   {{- $subject := trim (index . 1) " \t\n\r" -}}
-  <span class="resume-section">
+  <span class="resume-section {{ $title | plainify | urlize }}">
     <span class="resume-section-title">
       {{ $title | safeHTML }}
     </span>
