@@ -16,6 +16,10 @@
   }
 }
 
+.resume-sections {
+  display: table;
+}
+
 .resume-section {
   display: table-row;
 
@@ -31,6 +35,10 @@
 //
 
 .resume-section.education {
+  .resume-blurb {
+    margin-bottom: 1em;
+  }
+
   p {
     margin: 0 auto;
     width: 200px;
@@ -65,8 +73,7 @@
 //
 
 .resume-blurb .title,
-.resume-blurb .date,
-.resume-blurb .location {
+.resume-blurb .date {
   margin: 0;
   padding: 0;
 }
@@ -88,22 +95,26 @@
   vertical-align: middle;
 }
 
-.resume-blurb .location {
-  display: table-row;
-  font-style: italic;
-}
-
 //
 
 @media only screen and (min-width: 426px) {
   .resume-section-title,
   .resume-section-content {
     display: table-cell;
+    padding: 20px 10px;
+  }
+
+  .resume-section-title {
+    padding: 20px 15px;
   }
 
   //
 
   .resume-section.education {
+    .resume-blurb {
+      margin-bottom: 0;
+    }
+
     p {
       margin: 0;
       width: auto;
